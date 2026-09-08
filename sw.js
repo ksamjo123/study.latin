@@ -8,7 +8,7 @@
  */
 'use strict';
 
-var CACHE = 'latin-v1';
+var CACHE = 'latin-v2';   // 1:11–20 추가 + 장음 볼드 수정
 var SHELL = ['./', './index.html'];
 
 self.addEventListener('install', function (e) {
