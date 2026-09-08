@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>라틴어 다독</title>
+<meta name="description" content="불가타에서 오웬까지 — 오프라인 라틴어 다독 엔진">
+<meta name="theme-color" content="#96263B">
+
+<!-- iOS 홈 화면 설치용. 아이폰은 매니페스트만으로 부족하다. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="라틴어">
+<link rel="apple-touch-icon" href="data:image/png;base64,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j/7wf/ddQ4HgkUefXv/6S1Esr+GJF3uONkZxx8Ri4QRjjuMcHzWYFpcs2rxJeJhSq7E/fH/plu8PNLcOnG0f/PyCZ2jUN+4Mur2qdK3aoNOas81VZfm3Lc20Fv7fPcPhxu27Bs9fjOHPkHwYiYPjuFM7X1NqU4s3rY04klcp81dU5q+onObM4VC48Td/dBw+Juf52a1RYlh4zXHDjT9h65794k4bcHsbHn/+0qF6caeVBHbi4DguHAq3vLy3/rHtEV9STNNIh+Ng3c+vNPxblNkkh52nlZu+PHFq4Gy7/eEHSjdvms5HZ6fkGxs/9+rfOv/xrznyRZBTYmRvZUopuvQFG+8orl2bVVI03cvuhMND7Z2d7x+5/PHxOfgtw9/Achw3abIM5qolWbZi/YJbtDkmjdGg1KjlSmUoGAh4fH7nhLO3b/zK18PtnX2nPp9rBzMEzIk4IDpMvSAFcSEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOICEOIP0X7gg+3FuprnAAAAAASUVORK5CYII=">
+
+<link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"라틴어 다독","short_name":"라틴어","lang":"ko","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"%23EDF0F2","theme_color":"%2396263B","icons":[{"src":"data:image/png;base64,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","sizes":"192x192","type":"image/png"}]}'>
+<link rel="icon" href="data:image/png;base64,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">
+<style>
+/* 라틴어 다독 — 아이폰 세로 화면 단일 레이아웃 (SPEC 1장 제약) */
+
+:root{
+  --bg:#EDF0F2; --surface:#FBFCFD; --sunk:#E3E8EB;
+  --ink:#15202A; --muted:#5C6E7B; --faint:#8496A2;
+  --rule:#D0D9DF; --rule-strong:#B6C3CB;
+  --accent:#96263B; --accent-soft:#F2E0E3;
+  --flag:#96660A; --flag-soft:#F5EAD5;
+  --ok:#1C6B4A; --ok-soft:#DDEDE4;
+  --bad:#A32C2C; --bad-soft:#F6E1E1;
+  --focus:#1E6B94;
+  --serif:'Hoefler Text',Palatino,'Palatino Linotype','Book Antiqua',Georgia,'Times New Roman',serif;
+  --sans:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;
+  --bar:3.1rem;
+  --tabs:calc(3.4rem + env(safe-area-inset-bottom,0px));
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E141A; --surface:#161E25; --sunk:#1D272F;
+    --ink:#E3EAEF; --muted:#93A5B1; --faint:#6E828F;
+    --rule:#28343D; --rule-strong:#3A4A55;
+    --accent:#E2808F; --accent-soft:#3A2229;
+    --flag:#D9AB55; --flag-soft:#2F2716;
+    --ok:#6FC79E; --ok-soft:#163025;
+    --bad:#E38585; --bad-soft:#331C1C;
+    --focus:#63B4DC;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --surface:#161E25; --sunk:#1D272F;
+  --ink:#E3EAEF; --muted:#93A5B1; --faint:#6E828F;
+  --rule:#28343D; --rule-strong:#3A4A55;
+  --accent:#E2808F; --accent-soft:#3A2229;
+  --flag:#D9AB55; --flag-soft:#2F2716;
+  --ok:#6FC79E; --ok-soft:#163025;
+  --bad:#E38585; --bad-soft:#331C1C;
+  --focus:#63B4DC;
+}
+
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.7;
+  -webkit-text-size-adjust:100%;
+  padding-top:var(--bar); padding-bottom:calc(var(--tabs) + 1rem);
+  overscroll-behavior-y:none;
+}
+.wrap{max-width:41rem;margin:0 auto;padding:0 1.15rem}
+.view[hidden]{display:none}
+
+/* ---------- 상단 바 ---------- */
+.bar{
+  position:fixed;top:0;left:0;right:0;z-index:15;height:var(--bar);
+  background:var(--surface);border-bottom:1px solid var(--rule-strong);
+}
+.bar-in{
+  max-width:41rem;margin:0 auto;padding:0 1.15rem;height:100%;
+  display:flex;align-items:center;gap:.6rem;
+}
+.wordmark{font-family:var(--serif);font-size:1.06rem;font-weight:600;letter-spacing:.01em}
+.net{
+  margin-left:auto;font-family:var(--mono);font-size:.63rem;letter-spacing:.08em;
+  padding:.16rem .42rem;border-radius:2px;border:1px solid transparent;
+}
+.net.on{color:var(--faint)}
+.net.off{color:var(--flag);border-color:var(--flag);background:var(--flag-soft)}
+
+/* ---------- 모듈 머리 ---------- */
+.modhead{padding:1.5rem 0 1rem;border-bottom:1px solid var(--rule-strong)}
+.eyebrow{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 .45rem;
+}
+.h1{font-family:var(--serif);font-weight:600;font-size:1.72rem;line-height:1.2;margin:0;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;gap:.38rem;margin:.85rem 0 0}
+.tag{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.03em;
+  padding:.22rem .46rem;border:1px solid var(--rule-strong);border-radius:2px;
+  color:var(--muted);background:var(--surface);
+}
+.tag.warn{color:var(--flag);border-color:var(--flag);background:var(--flag-soft)}
+.note{color:var(--muted);font-size:.84rem;margin:.9rem 0 0;line-height:1.65}
+
+/* ---------- 조작부 ---------- */
+.controls{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.85rem 0 1rem;border-bottom:1px solid var(--rule)}
+.sw{
+  display:inline-flex;align-items:center;gap:.42rem;cursor:pointer;font-size:.8rem;color:var(--muted);
+  padding:.35rem .62rem;border:1px solid var(--rule-strong);border-radius:2px;
+  background:var(--surface);user-select:none;-webkit-user-select:none;
+}
+.sw input{accent-color:var(--accent);margin:0;width:.9rem;height:.9rem}
+.spacer{flex:1}
+.resume{font-family:var(--mono);font-size:.7rem;color:var(--faint)}
+.loading{color:var(--faint);padding:2rem 0;font-size:.9rem}
+
+/* ---------- 절 ---------- */
+.verse{padding:1.7rem 0;border-bottom:1px solid var(--rule)}
+.vnum{font-family:var(--mono);font-size:.71rem;letter-spacing:.1em;color:var(--accent);margin:0 0 .65rem;font-weight:600}
+.lat{font-family:var(--serif);font-size:1.34rem;line-height:1.82;letter-spacing:.004em;margin:0 0 1rem}
+.pn{color:var(--faint)}
+.w{
+  font:inherit;color:inherit;background:none;border:0;padding:.05em .04em;margin:0;
+  cursor:pointer;border-bottom:1px solid transparent;border-radius:2px;
+}
+.w:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.w.on{background:var(--accent-soft);border-bottom-color:var(--accent)}
+.w.flagged{border-bottom:1px dotted var(--flag)}
+body.lv-on .lv{color:var(--accent)}
+
+/* ---------- 접이식 ---------- */
+.rows{display:flex;flex-direction:column;gap:.42rem}
+details{background:var(--surface);border:1px solid var(--rule);border-radius:3px}
+details[open]{border-color:var(--rule-strong)}
+summary{
+  cursor:pointer;padding:.55rem .75rem;font-size:.79rem;color:var(--muted);
+  list-style:none;display:flex;align-items:center;gap:.5rem;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;color:var(--faint);font-family:var(--mono)}
+details[open] summary::after{content:"\2212"}
+summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.k{font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.body{padding:0 .75rem .8rem;font-size:.89rem}
+.tr{margin:0 0 .5rem}
+.tr:last-child{margin-bottom:0}
+.lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:.1rem}
+
+/* ---------- 질문 ---------- */
+.q{border-top:1px solid var(--rule);padding:.6rem 0}
+.q:first-child{border-top:0;padding-top:.2rem}
+.q button{
+  font:inherit;text-align:left;background:none;border:0;padding:0;margin:0;color:var(--ink);
+  cursor:pointer;width:100%;font-size:.88rem;line-height:1.6;display:flex;gap:.5rem;
+}
+.q button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.q .n{font-family:var(--mono);font-size:.71rem;color:var(--accent);flex:none;padding-top:.18rem}
+.q .a{display:none;margin:.5rem 0 .1rem 1.45rem;padding-left:.8rem;border-left:2px solid var(--accent-soft);color:var(--muted);font-size:.85rem;line-height:1.72}
+.q.open .a{display:block}
+
+/* ---------- 이문 장치 ---------- */
+.app{font-size:.82rem;color:var(--muted);line-height:1.68}
+.app .item{padding:.5rem 0;border-top:1px solid var(--rule)}
+.app .item:first-child{border-top:0;padding-top:.1rem}
+.app .hd{display:flex;gap:.45rem;align-items:baseline;margin-bottom:.15rem;flex-wrap:wrap}
+.app .kind{font-family:var(--mono);font-size:.59rem;letter-spacing:.08em;text-transform:uppercase;color:var(--flag);border:1px solid var(--flag);border-radius:2px;padding:.05rem .3rem}
+.app .sfx{font-family:var(--serif);font-size:1rem;color:var(--ink)}
+.app .conf{font-family:var(--mono);font-size:.59rem;color:var(--faint);letter-spacing:.06em}
+.app .opts{margin:.28rem 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:.3rem}
+.app .opts li{font-family:var(--serif);font-size:.92rem;background:var(--sunk);padding:.1rem .42rem;border-radius:2px;color:var(--ink)}
+.app .opts li.pick{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.cit .ref{font-family:var(--mono);font-size:.71rem;color:var(--accent);letter-spacing:.05em}
+.cit .par{font-family:var(--serif);font-size:.97rem;color:var(--ink);background:var(--sunk);padding:.45rem .6rem;border-radius:2px;margin:.35rem 0 0;overflow-x:auto}
+
+/* ---------- 단어 시트 ---------- */
+#sheet{
+  position:fixed;left:0;right:0;bottom:var(--tabs);z-index:20;
+  background:var(--surface);border-top:2px solid var(--accent);
+  box-shadow:0 -10px 30px rgba(0,0,0,.14);
+  transform:translateY(calc(100% + var(--tabs)));transition:transform .18s ease;
+  padding:.9rem 1.15rem 1.1rem;
+}
+#sheet.up{transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){#sheet{transition:none}}
+#sheet .inner{max-width:41rem;margin:0 auto}
+#sheet .top{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.5rem}
+#sheet .sf{font-family:var(--serif);font-size:1.6rem;line-height:1.1}
+#sheet .lemma{font-family:var(--serif);font-size:.94rem;color:var(--muted)}
+#sheet .x{
+  margin-left:auto;font-family:var(--mono);font-size:.78rem;background:none;
+  border:1px solid var(--rule-strong);color:var(--muted);cursor:pointer;border-radius:2px;padding:.12rem .45rem;
+}
+#sheet .x:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+#sheet dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem .8rem;margin:0;font-size:.86rem}
+#sheet dt{font-family:var(--mono);font-size:.61rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);padding-top:.28rem}
+#sheet dd{margin:0;line-height:1.6}
+#sheet .warn{margin:.6rem 0 0;font-size:.78rem;color:var(--flag);background:var(--flag-soft);border-radius:2px;padding:.4rem .55rem}
+
+/* ---------- 탭 ---------- */
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;z-index:25;height:var(--tabs);
+  display:flex;background:var(--surface);border-top:1px solid var(--rule-strong);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.tab{
+  flex:1;font:inherit;font-size:.82rem;background:none;border:0;color:var(--muted);
+  cursor:pointer;border-top:2px solid transparent;margin-top:-1px;
+}
+.tab.on{color:var(--accent);border-top-color:var(--accent);font-weight:600}
+.tab:focus-visible{outline:2px solid var(--focus);outline-offset:-3px}
+
+/* ---------- 상태 화면 ---------- */
+.h2{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin:1.7rem 0 .5rem}
+.h3{font-family:var(--serif);font-size:1.12rem;font-weight:600;margin:1.8rem 0 .5rem}
+.lede{color:var(--muted);font-size:.87rem;margin:0 0 1.2rem;line-height:1.7}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.45rem}
+.checks li{
+  display:flex;align-items:flex-start;gap:.6rem;background:var(--surface);
+  border:1px solid var(--rule);border-radius:3px;padding:.65rem .75rem;
+}
+.checks .dot{
+  flex:none;width:.62rem;height:.62rem;border-radius:50%;margin-top:.42rem;background:var(--faint);
+}
+.checks li.ok .dot{background:var(--ok)}
+.checks li.bad .dot{background:var(--bad)}
+.checks .t{font-size:.87rem;font-weight:500}
+.checks .d{font-size:.78rem;color:var(--muted);line-height:1.6;margin-top:.1rem}
+.checks li.ok .t{color:var(--ok)}
+.checks li.bad .t{color:var(--bad)}
+.actions{display:flex;gap:.5rem;margin:1.1rem 0 0;flex-wrap:wrap}
+.btn{
+  font:inherit;font-size:.83rem;padding:.5rem .9rem;border-radius:2px;cursor:pointer;
+  background:var(--surface);border:1px solid var(--rule-strong);color:var(--ink);
+}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary,
+:root:not([data-theme="light"]) .btn.primary{color:#1A1013}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .btn.primary{color:#fff}}
+.btn.warn{color:var(--bad);border-color:var(--bad)}
+.btn[disabled]{opacity:.5;cursor:default}
+.files{list-style:none;margin:0;padding:0;font-family:var(--mono);font-size:.73rem;color:var(--muted)}
+.files li{padding:.28rem 0;border-bottom:1px solid var(--rule);word-break:break-all}
+.files li:last-child{border-bottom:0}
+.danger{margin:2.2rem 0 0;padding:.9rem;border:1px solid var(--rule-strong);border-radius:3px;background:var(--sunk)}
+.danger p{font-size:.8rem;color:var(--muted);margin:.2rem 0 .7rem}
+.danger .h3{margin-top:0}
+
+.foot{padding:1.8rem 0 1rem;color:var(--faint);font-size:.75rem;line-height:1.7}
+.foot code{font-family:var(--mono);font-size:.71rem}
+
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <span class="wordmark">라틴어 다독</span>
+    <span class="net" id="net" aria-live="polite"></span>
+  </div>
+</header>
+
+<main>
+  <!-- ─────────── 읽기 ─────────── -->
+  <section id="view-read" class="view">
+    <div class="wrap">
+      <div id="modmeta"></div>
+
+      <div class="controls">
+        <label class="sw"><input type="checkbox" id="lv"> 장음 강조</label>
+        <span class="spacer"></span>
+        <span class="resume" id="resume"></span>
+      </div>
+
+      <div id="verses">
+        <p class="loading">모듈을 여는 중…</p>
+      </div>
+
+      <footer class="foot" id="foot"></footer>
+    </div>
+  </section>
+
+  <!-- ─────────── 상태 ─────────── -->
+  <section id="view-state" class="view" hidden>
+    <div class="wrap">
+      <h2 class="h2">오프라인 준비 상태</h2>
+      <p class="lede">
+        비행기 모드로 바꾸고 앱을 다시 열었을 때 정상으로 열려야 합니다.
+        아래 네 줄이 모두 초록이면 그 조건이 갖춰진 것입니다.
+      </p>
+
+      <ul class="checks" id="checks"></ul>
+
+      <div class="actions">
+        <button type="button" class="btn primary" id="persist">영구 저장 요청</button>
+        <button type="button" class="btn" id="recheck">다시 검사</button>
+      </div>
+
+      <h3 class="h3">캐시에 담긴 파일</h3>
+      <ul class="files" id="files"></ul>
+
+      <div class="danger">
+        <h3 class="h3">캐시 비우기</h3>
+        <p>서비스 워커를 등록 해제하고 캐시를 지웁니다. 설치가 꼬였을 때만 쓰십시오.</p>
+        <button type="button" class="btn warn" id="nuke">초기화</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ─────────── 단어 시트 ─────────── -->
+<div id="sheet" role="dialog" aria-label="단어 정보" aria-modal="false">
+  <div class="inner">
+    <div class="top">
+      <span class="sf" id="sf"></span>
+      <span class="lemma" id="lemma"></span>
+      <button type="button" class="x" id="x" aria-label="닫기">닫기</button>
+    </div>
+    <dl>
+      <dt>형태</dt><dd id="dMorph"></dd>
+      <dt>역할</dt><dd id="dRole"></dd>
+      <dt>뜻</dt><dd id="dGloss"></dd>
+    </dl>
+    <p class="warn" id="warn" hidden></p>
+  </div>
+</div>
+
+<!-- ─────────── 탭 ─────────── -->
+<nav class="tabs" role="tablist">
+  <button type="button" class="tab on" data-view="read" role="tab" aria-selected="true">읽기</button>
+  <button type="button" class="tab" data-view="state" role="tab" aria-selected="false">상태</button>
+</nav>
+
+<script>window.__MODULE={"module_id":"vulgate-mark","schema_version":"1.1","spec_ref":"SPEC.md v1.1 §3.4 (Sentence / Token / ScriptureCitation / QuestionBank) + §3.6 (BibleVersion)","glossary_ref":"glossary.json v1.0","generated":"2026-09-07","scope":"불가타 마가복음 1:1–10","base_text":{"edition":"Clementine Vulgate (퍼블릭 도메인)","orthography":"j→i, æ→ae로 정규화. oe→ae 고전 철자 적용 (paenitentia). 대문자는 문장 첫 글자와 고유명사에만.","variants_noted":"슈투트가르트 비평판과 갈리는 지점은 각 문장의 uncertain 항목에 kind:'text'로 기록"},"conventions":{"token_index":"0부터 시작. 구두점은 토큰으로 세지 않음.","vowel_length":"모든 라틴어 표기에 마크론 필수 (SPEC §7). 불확실한 것은 sentence.uncertain에 kind:'vowel_length'로 기록하고 잠정 표기를 유지.","morph_syntax_terms":"glossary.json의 use 표기만 사용. never 목록 표기는 출력에 등장하지 않음.","sentence_unit":"1절 = 1 Sentence. id는 mk-1-<절번호>.","uncertain":"SPEC 3.4에 없는 확장 필드. kind는 vowel_length(마크론) / parsing / orthography / lemma / text. 5단계 검증에서 해소한다.","verified":"SPEC §5 5단계 검증 전이므로 전 문장 false. 배포 금지 상태.","source_version":"SPEC 3.6의 판본 id. 이 모듈은 전 문장이 vg-clem(클레멘스 불가타)이다.","greek":"SPEC §6이 지시한 그리스어 필드. Sentence.greek / Token.greek_align / Token.greek_lemma 모두 null로 열어만 둔 상태이며, 3단계(칼뱅) 이후 채운다.","scripture_citations":"저자 산문 안에 인용된 성경 구간. 이 모듈은 본문 자체가 성경이지만, 2~3절이 구약을 인용하므로 같은 구조로 기술한다."},"bible_versions":[{"id":"vg-clem","title":"클레멘스 불가타 (Biblia Sacra Vulgata Clementina)","year":"1592","language":"la","testament":"both","tradition":"roman","used_by":["로마 가톨릭 표준","1592년 이후 논쟁서의 인용 대상"],"pd":true,"digital_text":"good","note_ko":"트렌트 공의회가 명령한 표준화의 산물. 루터(1546년 사망)와 칼뱅(1564년 사망)은 본 적이 없다. 이 모듈의 저본이며, 선택 근거는 개혁파적 적합성이 아니라 전자 텍스트 품질이다."},{"id":"vg-stutt","title":"슈투트가르트 비평판 (Biblia Sacra iuxta Vulgatam Versionem)","year":"1969–","language":"la","testament":"both","tradition":"neutral","used_by":["현대 학계"],"pd":false,"digital_text":"good","note_ko":"히에로니무스 원문 복원을 목표로 한 현대 학술판. 역시 개혁자들이 읽던 텍스트가 아니다. 본문 이문 대조용으로만 참조한다."},{"id":"erasmus","title":"에라스무스 신약 (Novum Instrumentum omne)","year":"1516–1535","language":"la","testament":"nt","tradition":"humanist","used_by":["루터 (1519년 2판으로 1522년 독일어 신약 번역)"],"pd":true,"digital_text":"partial","note_ko":"라틴 열이 불가타가 아니라 에라스무스 자신의 새 번역이다. poenitentiam agite → resipiscite 같은 번역 선택이 곧바로 신학 논쟁이 되었다."},{"id":"pagninus","title":"파니누스 라틴어 성경 (Sanctes Pagninus)","year":"1528","language":"la","testament":"both","tradition":"humanist","used_by":["16세기 히브리어 학자 전반"],"pd":true,"digital_text":"scans_only","note_ko":"히에로니무스 이후 원어에서 옮긴 첫 라틴어 완역. 매우 직역적이라 후대 라틴어 번역의 기준이 되었다."},{"id":"beza","title":"베자 라틴어 신약 (Theodorus Beza)","year":"1556–1604","language":"la","testament":"nt","tradition":"reformed","used_by":["뚤레틴","에임스","오웬","웨스트민스터 총회"],"pd":true,"digital_text":"partial","note_ko":"개혁파의 표준 라틴어 신약. 주석이 특히 영향력이 컸고 제네바 성경과 KJV의 바탕이 되었다."},{"id":"jt","title":"유니우스–트레멜리우스 라틴어 구약","year":"1575–1579","language":"la","testament":"ot","tradition":"reformed","used_by":["뚤레틴","에임스","오웬","웨스트민스터 총회"],"pd":true,"digital_text":"scans_only","note_ko":"개혁파 스콜라주의가 라틴어로 구약을 인용할 때의 사실상 표준. 베자 신약과 합본으로 유통되었다. 5단계(뚤레틴) 진입 전까지 OCR 부채."},{"id":"tr","title":"Textus Receptus (스테파누스 / 엘제비르)","year":"1550 / 1633","language":"grc","testament":"nt","tradition":"neutral","used_by":["개혁파 전반","오웬 (1659년에 그 순수성을 변호)"],"pd":true,"digital_text":"good","note_ko":"스테파누스 1550년판이 표준. 1551년판에서 절 번호가 도입되었다. textus receptus라는 이름은 엘제비르 1633년판 서문에서 왔다."},{"id":"lxx","title":"칠십인역 (Septuaginta)","year":"—","language":"grc","testament":"ot","tradition":"neutral","used_by":["신약 저자들"],"pd":true,"digital_text":"good","note_ko":"신약의 구약 인용은 대개 이쪽을 따른다. 불가타 구약(히브리어에서 번역)과 자구가 어긋나는 원인."},{"id":"mt","title":"마소라 본문 (봄베르크 랍비 성경 2판)","year":"1524–1525","language":"hbo","testament":"ot","tradition":"neutral","used_by":["개혁파 전반"],"pd":true,"digital_text":"partial","note_ko":"야콥 벤 하임 편집. 이후 수백 년간 표준 히브리어 본문. 원판 자체는 스캔뿐이나 계승 텍스트는 전자화되어 있다."},{"id":"author","title":"저자 자신의 번역","year":"—","language":"la","testament":"both","tradition":"neutral","used_by":[],"pd":true,"digital_text":"none","note_ko":"오웬처럼 원어에서 직접 옮겨 인용하는 경우. 어느 인쇄판과도 일치하지 않는다."}],"sentences":[{"id":"mk-1-1","text_id":"vulgate-mark-1","latin":"Initium evangeliī Iēsū Chrīstī, Fīliī Deī.","order":1,"period":"vulgate","tradition":"neutral","translation_ko":"하나님의 아들 예수 그리스도의 복음의 시작.","translation_free_ko":"하나님의 아들 예수 그리스도에 관한 복음은 여기서 시작된다.","ref":"Mc 1,1","verified":false,"uncertain":[{"id":"u-mk1-1-01","kind":"vowel_length","token_index":1,"surface":"evangeliī","issue":"첫 음절 e의 길이. 그리스어 εὐαγγέλιον의 eu는 이중모음이므로 고전 표기 euangelium에서는 첫 음절이 장음이다. 중세 이후 v로 적으면서 e가 독립 단음절이 되었다. 어느 쪽을 앱의 표준으로 삼을지 미정.","options":["evangeliī (e 단음, 중세 표기 기준)","euangeliī (eu 이중모음, 고전 표기 기준)"],"chosen":"evangeliī","confidence":"low","resolve_by":"Latin Macronizer 출력 대조 + Lewis & Short 표제어(euangelium) 확인 후 프로젝트 전체 표기 정책으로 확정"},{"id":"u-mk1-1-02","kind":"vowel_length","token_index":3,"surface":"Chrīstī","issue":"그리스어 Χριστός의 ι는 단음이나, 라틴 기독교 시가에서는 일관되게 장음으로 스캔된다(Chrīstus).","options":["Chrīstī (라틴 시가 관행)","Christī (그리스어 어원 기준)"],"chosen":"Chrīstī","confidence":"medium","resolve_by":"프루덴티우스 등 기독교 시가 스캔 예시로 확정"},{"id":"u-mk1-1-03","kind":"parsing","token_index":2,"surface":"Iēsū","issue":"evangeliī에 걸리는 소유격이 주어적 소유격인지 목적어적 소유격인지. '예수께서 전하신 복음'과 '예수에 관한 복음'이 갈린다.","options":["목적어적 소유격 (예수에 관한 복음)","주어적 소유격 (예수께서 전하신 복음)","양쪽을 겸하는 의도적 중의"],"chosen":"목적어적 소유격","confidence":"medium","resolve_by":"해석 문제이므로 확정하지 말고 질문 은행에서 양쪽을 제시할 것"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-2","text_id":"vulgate-mark-1","latin":"Sīcut scrīptum est in Isaiā prophētā: Ecce ego mittō angelum meum ante faciem tuam, quī praeparābit viam tuam ante tē.","order":2,"period":"vulgate","tradition":"neutral","translation_ko":"이사야 예언자 안에 기록되어 있는 것과 같이: 보라, 내가 네 얼굴 앞에 내 사자를 보낸다. 그가 네 앞에서 네 길을 예비할 것이다.","translation_free_ko":"예언자 이사야의 글에 기록된 그대로다. \"보아라, 내가 너보다 앞서 내 사자를 보낸다. 그가 네 길을 닦아 놓을 것이다.\"","ref":"Mc 1,2","verified":false,"uncertain":[{"id":"u-mk1-2-01","kind":"text","token_index":null,"surface":"ego / ante tē","issue":"클레멘스 불가타에는 ego와 문말 ante tē가 있으나 슈투트가르트 비평판에는 둘 다 없다. 또 슈투트가르트는 Esaia로 적는다.","options":["클레멘스 본문 (ego, ante tē 포함)","슈투트가르트 본문 (둘 다 없음)"],"chosen":"클레멘스 본문","confidence":"medium","resolve_by":"모듈 전체의 저본을 하나로 확정할 것. 저본이 바뀌면 토큰 인덱스가 전부 밀린다."},{"id":"u-mk1-2-02","kind":"vowel_length","token_index":4,"surface":"Isaiā","issue":"히브리어 기원 고유명사의 모음 길이는 라틴 사전에 확정 표제가 없다. 탈격 어미 -ā만 확실하다.","options":["Isaiā","Īsaiā","Isaīā"],"chosen":"Isaiā","confidence":"low","resolve_by":"SPEC 5장의 보조 표제어 사전에 성경 고유명사 항목을 신설하고 일괄 결정"},{"id":"u-mk1-2-03","kind":"text","token_index":4,"surface":"Isaiā prophētā","issue":"인용 출처 표기의 이문. 라틴어 전통(클레멘스·슈투트가르트 모두)은 '이사야 예언자 안에'로 읽지만, Textus Receptus 계열 그리스어는 '예언자들 안에'(ἐν τοῖς προφήταις)로 읽고 KJV도 그렇게 옮긴다. 실제 인용문은 말라기와 출애굽기의 결합이므로 복수형이 사실관계에 더 맞고, 단수형이 더 어려운 독법이다. 이 모듈이 학습자에게 가르치는 라틴어 본문은 오웬이 변호한 Textus Receptus와 이 자리에서 갈린다.","options":["in Isaiā prophētā (라틴어 전통)","in prophētīs (Textus Receptus 계열에 맞춘 독법)"],"chosen":"in Isaiā prophētā (라틴어 전통)","confidence":"medium","resolve_by":"저본이 클레멘스판이므로 라틴어 독법을 따른다. 다만 이 어긋남 자체를 질문 은행 항목으로 노출할 것 — 판본 문제를 학습자가 처음 만나는 자리로 적합하다."}],"source_version":"vg-clem","greek":null},{"id":"mk-1-3","text_id":"vulgate-mark-1","latin":"Vōx clāmantis in dēsertō: Parāte viam Dominī, rēctās facite sēmitās eius.","order":3,"period":"vulgate","tradition":"neutral","translation_ko":"광야에서 외치는 자의 소리: 주의 길을 예비하라, 그의 지름길들을 곧게 만들라.","translation_free_ko":"광야에서 외치는 소리가 있다. \"주님의 길을 마련하여라. 그분이 다니실 길을 곧게 내어라.\"","ref":"Mc 1,3","verified":false,"uncertain":[{"id":"u-mk1-3-01","kind":"parsing","token_index":3,"surface":"in dēsertō","issue":"구두점이 원문에 없다. in dēsertō를 clāmantis에 붙이면 '광야에서 외치는 자의 소리', Parāte에 붙이면 '외치는 자의 소리: 광야에서 주의 길을 예비하라'가 된다. 히브리어 원문(이사야 40:3)의 대구 구조는 후자를 지지하고, 그리스어 칠십인역과 불가타의 어순은 전자로 읽히게 만든다.","options":["clāmantis에 소속 (전통적 독법)","Parāte에 소속 (히브리어 대구 기준)"],"chosen":"clāmantis에 소속","confidence":"medium","resolve_by":"해석 문제이므로 확정하지 말 것. 질문 은행 항목으로 노출한다."}],"source_version":"vg-clem","greek":null},{"id":"mk-1-4","text_id":"vulgate-mark-1","latin":"Fuit Iōhannēs in dēsertō baptizāns, et praedicāns baptismum paenitentiae in remissiōnem peccātōrum.","order":4,"period":"vulgate","tradition":"neutral","translation_ko":"요한이 광야에서 세례를 주며, 죄들의 사함에 이르는 회개의 세례를 선포하며 있었다.","translation_free_ko":"요한이 광야에 나타나 세례를 주면서, 죄를 용서받게 하는 회개의 세례를 선포하였다.","ref":"Mc 1,4","verified":false,"uncertain":[{"id":"u-mk1-4-01","kind":"vowel_length","token_index":1,"surface":"Iōhannēs","issue":"그리스어 Ἰωάννης의 ω를 장음 ō로 잡았다. 다만 라틴 표기가 Ioannes / Iohannes / Joannes로 갈리고(클레멘스판은 Joannes), h가 있는 형태의 음절 구조도 확정적이지 않다.","options":["Iōhannēs (슈투트가르트 철자 + 그리스어 ω 반영)","Iōannēs (h 없음)","Iohannēs (첫 음절 단음)"],"chosen":"Iōhannēs","confidence":"low","resolve_by":"SPEC 5장 보조 표제어 사전에 성경 고유명사 항목을 신설하고 모듈 전체에 일괄 적용"},{"id":"u-mk1-4-02","kind":"orthography","token_index":8,"surface":"paenitentiae","issue":"클레멘스 불가타는 poenitentiae로 적는다. 고전 철자 paenitentia로 정규화했으나 ae와 oe는 발음이 다르므로(SPEC 7장 고전 발음 채택) 표기 정책 확정이 필요하다.","options":["paenitentiae (고전 철자로 정규화)","poenitentiae (클레멘스 철자 유지)"],"chosen":"paenitentiae","confidence":"medium","resolve_by":"모듈 전체 철자 정규화 규칙을 문서화하고 일괄 적용"},{"id":"u-mk1-4-03","kind":"lemma","token_index":7,"surface":"baptismum","issue":"이 형태는 baptismus(2변화 남성)의 대격일 수도, baptisma(3변화 중성, 대격 baptisma)와 병존하는 이형일 수도 있다. 불가타는 두 표제어를 모두 쓴다.","options":["baptismus, -ī (2변화 남성)","baptisma, -atis (3변화 중성)"],"chosen":"baptismus, -ī (2변화 남성)","confidence":"medium","resolve_by":"불가타 전체 용례를 검색해 형태 분포로 결정"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-5","text_id":"vulgate-mark-1","latin":"Et ēgrediēbātur ad eum omnis Iūdaeae regiō, et Ierosolymītae ūniversī, et baptizābantur ab illō in Iordānis flūmine, cōnfitentēs peccāta sua.","order":5,"period":"vulgate","tradition":"neutral","translation_ko":"그리고 온 유대 지방과 예루살렘 사람 전체가 그에게로 나아가고 있었고, 자기들의 죄를 고백하면서 그에게 요단 강에서 세례를 받고 있었다.","translation_free_ko":"온 유대 지방과 예루살렘 사람들이 모두 그에게 나아와, 자기 죄를 고백하며 요단 강에서 그에게 세례를 받았다.","ref":"Mc 1,5","verified":false,"uncertain":[{"id":"u-mk1-5-01","kind":"vowel_length","token_index":8,"surface":"Ierosolymītae","issue":"그리스어 접미사 -ίτης의 ι가 장음이므로 -ītae로 잡았으나, 라틴어에 정착한 이 지명 파생어의 표제 형태 자체가 사전마다 흔들린다(Hierosolymīta / Ierosolymīta).","options":["Ierosolymītae","Hierosolymītae"],"chosen":"Ierosolymītae","confidence":"low","resolve_by":"보조 표제어 사전에서 성경 지명 파생어 규칙과 함께 확정"},{"id":"u-mk1-5-02","kind":"vowel_length","token_index":15,"surface":"Iordānis","issue":"Ἰορδάνης의 α 길이가 확정적이지 않다. -ānēs 접미의 장음 관행을 따라 ā로 잡았다.","options":["Iordānis","Iordanis"],"chosen":"Iordānis","confidence":"low","resolve_by":"보조 표제어 사전에서 일괄 확정 (9절 Iordāne와 함께)"},{"id":"u-mk1-5-03","kind":"parsing","token_index":15,"surface":"Iordānis","issue":"소유격으로 보아 '요단의 강'(동격적 소유격)으로 읽었으나, Iordānis를 3변화 명사의 주격·소유격 동형으로 보아 flūmine와 동격 탈격으로 읽을 여지도 형태상 남는다. 다만 격이 맞지 않으므로 소유격이 유력하다.","options":["소유격 (flūmine를 한정)","다른 격으로 재분석"],"chosen":"소유격","confidence":"medium","resolve_by":"Whitaker's WORDS 파싱 대조"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-6","text_id":"vulgate-mark-1","latin":"Et erat Iōhannēs vestītus pilīs camēlī, et zōnā pellīceā circā lumbōs eius, et locustās et mel silvestre edēbat.","order":6,"period":"vulgate","tradition":"neutral","translation_ko":"그리고 요한은 낙타의 털로, 그리고 그의 허리 둘레의 가죽 띠로 옷 입혀져 있었고, 메뚜기와 들꿀을 먹고 있었다.","translation_free_ko":"요한은 낙타털 옷을 입고 허리에 가죽 띠를 두르고 있었으며, 메뚜기와 들꿀을 먹고 지냈다.","ref":"Mc 1,6","verified":false,"uncertain":[{"id":"u-mk1-6-01","kind":"parsing","token_index":7,"surface":"zōnā pellīceā","issue":"탈격으로 보아 pilīs와 병렬하는 수단탈격(vestītus에 딸림)으로 잡았다. 그러나 주격 zōna pellīcea로 보아 앞의 erat를 다시 취하는 별개의 서술('가죽 띠가 그의 허리에 둘려 있었다')로 읽을 수도 있다. 마크론 없는 필사본 철자로는 구별되지 않는다.","options":["탈격 zōnā pellīceā (vestītus의 수단탈격)","주격 zōna pellīcea (erat의 주어)"],"chosen":"탈격 zōnā pellīceā","confidence":"medium","resolve_by":"그리스어 원문(ζώνην δερματίνην, 대격)과 라틴 주석 전통 대조. 마크론 표기가 곧 파싱 결정이 되는 사례이므로 검증 우선순위 높음"},{"id":"u-mk1-6-02","kind":"vowel_length","token_index":8,"surface":"pellīceā","issue":"pellis 파생 형용사의 i 길이가 사전마다 갈린다(pellĭceus / pellīceus).","options":["pellīceā","pelliceā"],"chosen":"pellīceā","confidence":"low","resolve_by":"Lewis & Short 및 Oxford Latin Dictionary 대조"},{"id":"u-mk1-6-03","kind":"vowel_length","token_index":13,"surface":"locustās","issue":"음절 무게는 st 때문에 어느 쪽이든 중음절이지만, 모음 자체의 길이(locusta / locūsta)가 확정되지 않았다. 고전 발음 IPA 산출에는 영향이 있다.","options":["locustās (u 단음)","locūstās (u 장음)"],"chosen":"locustās","confidence":"low","resolve_by":"사전 대조. IPA 계산 함수의 입력이 되므로 확정 필요"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-7","text_id":"vulgate-mark-1","latin":"Et praedicābat, dīcēns: Venit fortior post mē, cuius nōn sum dignus prōcumbēns solvere corrigiam calceāmentōrum eius.","order":7,"period":"vulgate","tradition":"neutral","translation_ko":"그리고 그는 선포하고 있었다, 말하기를: 나보다 더 강한 이가 내 뒤에 온다. 나는 몸을 굽혀 그의 신발의 끈을 푸는 것도 합당하지 않다.","translation_free_ko":"그는 이렇게 선포하였다. \"나보다 더 힘센 분이 내 뒤에 오신다. 나는 몸을 굽혀 그분의 신발 끈을 풀어 드릴 자격조차 없다.\"","ref":"Mc 1,7","verified":false,"uncertain":[{"id":"u-mk1-7-01","kind":"vowel_length","token_index":3,"surface":"Venit","issue":"철자만으로는 현재 venit와 완료 vēnit가 구별되지 않는다. 그리스어 원문 ἔρχεται가 현재이므로 현재로 잡았다. 9절의 vēnit(그리스어 ἦλθεν, 아오리스트)와 정반대이므로 두 절을 함께 검증해야 한다.","options":["venit (직설법 현재)","vēnit (직설법 완료)"],"chosen":"venit (직설법 현재)","confidence":"medium","resolve_by":"그리스어 대조는 마쳤으나 라틴 주석 전통 확인 필요. SPEC 7장이 지목한 venit/vēnit 사례이므로 검증 우선순위 최상"},{"id":"u-mk1-7-02","kind":"parsing","token_index":7,"surface":"cuius","issue":"cuius를 calceāmentōrum을 한정하는 소유격으로 보았다(뒤의 eius가 같은 대상을 중복 지시하는 셈어법). dignus가 소유격을 지배한다고 보는 독법도 있으나 dignus는 본래 탈격을 지배하므로 채택하지 않았다.","options":["calceāmentōrum을 한정하는 관계대명사 소유격","dignus가 지배하는 소유격"],"chosen":"calceāmentōrum을 한정하는 관계대명사 소유격","confidence":"medium","resolve_by":"그리스어 οὗ ... αὐτοῦ 구조 및 Allen & Greenough의 dignus 항목 대조"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-8","text_id":"vulgate-mark-1","latin":"Ego baptizāvī vōs aquā, ille vērō baptizābit vōs Spīritū Sānctō.","order":8,"period":"vulgate","tradition":"neutral","translation_ko":"나는 물로 너희에게 세례를 주었다. 그러나 그는 성령으로 너희에게 세례를 줄 것이다.","translation_free_ko":"나는 너희에게 물로 세례를 주었지만, 그분은 성령으로 세례를 주실 것이다.","ref":"Mc 1,8","verified":false,"uncertain":[{"id":"u-mk1-8-01","kind":"parsing","token_index":8,"surface":"Spīritū Sānctō","issue":"aquā와 병렬하는 수단탈격으로 잡았다. 다만 신학적으로는 성령을 단순한 도구로 보는 독해에 이견이 있어, 어떤 주석 전통은 이를 영역·영향권을 나타내는 탈격으로 읽는다.","options":["수단탈격 (aquā와 병렬)","영역을 나타내는 탈격"],"chosen":"수단탈격","confidence":"medium","resolve_by":"문법적으로는 수단탈격이 자연스럽다. 신학적 함의는 3c층 어휘 작업에서 별도로 다룰 것"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-9","text_id":"vulgate-mark-1","latin":"Et factum est: in diēbus illīs vēnit Iēsūs ā Nazareth Galilaeae, et baptizātus est ā Iōhanne in Iordāne.","order":9,"period":"vulgate","tradition":"neutral","translation_ko":"그리고 이런 일이 있었다: 그 날들에 예수께서 갈릴래아의 나사렛으로부터 오셨고, 요단에서 요한에게 세례를 받으셨다.","translation_free_ko":"그 무렵에 예수께서 갈릴래아 나사렛에서 오셔서, 요단 강에서 요한에게 세례를 받으셨다.","ref":"Mc 1,9","verified":false,"uncertain":[{"id":"u-mk1-9-01","kind":"vowel_length","token_index":6,"surface":"vēnit","issue":"그리스어 ἦλθεν(아오리스트)에 대응하므로 완료 vēnit로 잡았다. 7절의 venit(현재)와 철자가 같으므로 두 절을 반드시 함께 검증해야 한다.","options":["vēnit (직설법 완료)","venit (직설법 현재)"],"chosen":"vēnit (직설법 완료)","confidence":"medium","resolve_by":"7절 항목과 묶어서 함께 확정"},{"id":"u-mk1-9-02","kind":"vowel_length","token_index":9,"surface":"Nazareth","issue":"히브리어 기원의 무변화 고유명사로 라틴어 모음 길이가 확정되지 않는다. 마크론을 하나도 붙이지 않았다.","options":["Nazareth (마크론 없음)","Nazarēth"],"chosen":"Nazareth","confidence":"low","resolve_by":"보조 표제어 사전에서 무변화 성경 지명 처리 규칙과 함께 확정. IPA 계산 함수에서 예외 처리 필요"},{"id":"u-mk1-9-03","kind":"parsing","token_index":10,"surface":"Galilaeae","issue":"-ae 어미는 소유격 단수·여격 단수·주격 복수가 모두 같다. Nazareth를 한정하는 소유격으로 잡았다.","options":["소유격 단수 (Nazareth를 한정)","여격 단수","주격 복수"],"chosen":"소유격 단수","confidence":"medium","resolve_by":"의미상 소유격이 확실하나, -ae 중의성은 학습 항목으로 노출할 가치가 있어 질문 은행에 포함함"}],"source_version":"vg-clem","greek":null},{"id":"mk-1-10","text_id":"vulgate-mark-1","latin":"Et statim ascendēns dē aquā, vīdit caelōs apertōs, et Spīritum tamquam columbam dēscendentem, et manentem in ipsō.","order":10,"period":"vulgate","tradition":"neutral","translation_ko":"그리고 즉시 물에서 올라오면서, 열린 하늘들과, 비둘기처럼 내려와 자기 위에 머무르는 성령을 보았다.","translation_free_ko":"그리고 물에서 올라오시자마자, 하늘이 갈라지고 성령이 비둘기처럼 자기에게 내려오는 것을 보셨다.","ref":"Mc 1,10","verified":false,"uncertain":[{"id":"u-mk1-10-01","kind":"text","token_index":6,"surface":"caelōs apertōs","issue":"클레멘스판은 vidit caelos apertos, 슈투트가르트판은 vidit apertos caelos로 어순이 다르다. 뜻은 같으나 토큰 인덱스가 달라진다.","options":["caelōs apertōs (클레멘스)","apertōs caelōs (슈투트가르트)"],"chosen":"caelōs apertōs (클레멘스)","confidence":"medium","resolve_by":"모듈 저본 확정과 함께 처리"},{"id":"u-mk1-10-02","kind":"parsing","token_index":7,"surface":"apertōs","issue":"caelōs를 단순 수식하는지('열린 하늘들을 보았다'), 서술 대격인지('하늘들이 열린 것을 보았다')가 갈린다. vīdit류 지각동사는 서술 대격을 흔히 취한다.","options":["서술 대격","단순 수식"],"chosen":"서술 대격","confidence":"medium","resolve_by":"그리스어 σχιζομένους τοὺς οὐρανούς 구조 대조"},{"id":"u-mk1-10-03","kind":"vowel_length","token_index":5,"surface":"vīdit","issue":"완료 vīdit와 현재 videt는 철자가 다르나(vidit / videt) 필사본에서 e/i 혼동이 잦다. 완료로 잡았다.","options":["vīdit (직설법 완료)","videt (직설법 현재)"],"chosen":"vīdit (직설법 완료)","confidence":"medium","resolve_by":"그리스어 εἶδεν(아오리스트) 대조로 완료가 유력. 마크론 위치만 재확인"}],"source_version":"vg-clem","greek":null}],"tokens":[{"sentence_id":"mk-1-1","index":0,"surface":"Initium","lemma_id":"lem:initium","morph":"주격 단수 중성 (2변화)","syntax_role":"정동사 없는 표제문의 중심어 (표제 주격)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-1","index":1,"surface":"evangeliī","lemma_id":"lem:evangelium","morph":"소유격 단수 중성 (2변화)","syntax_role":"Initium을 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-1","index":2,"surface":"Iēsū","lemma_id":"lem:Iesus","morph":"소유격 단수 남성 (그리스어계 불규칙 변화)","syntax_role":"evangeliī를 한정하는 목적어적 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-1","index":3,"surface":"Chrīstī","lemma_id":"lem:Christus","morph":"소유격 단수 남성 (2변화)","syntax_role":"Iēsū와 동격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-1","index":4,"surface":"Fīliī","lemma_id":"lem:filius","morph":"소유격 단수 남성 (2변화)","syntax_role":"Iēsū Chrīstī와 동격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-1","index":5,"surface":"Deī","lemma_id":"lem:deus","morph":"소유격 단수 남성 (2변화)","syntax_role":"Fīliī를 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":0,"surface":"Sīcut","lemma_id":"lem:sicut","morph":"접속사","syntax_role":"비교 부사절을 이끄는 접속사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":1,"surface":"scrīptum","lemma_id":"lem:scribo","morph":"완료수동분사 주격 단수 중성 (PPP, 3변화 동사)","syntax_role":"est와 결합하여 완료 수동 정동사를 이룸 (비인칭)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":2,"surface":"est","lemma_id":"lem:sum","morph":"직설법 현재 능동 3인칭 단수 (불규칙 동사 sum)","syntax_role":"scrīptum과 결합한 조동사 — scrīptum est 전체가 완료 수동","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":3,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"Isaiā prophētā를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":4,"surface":"Isaiā","lemma_id":"lem:Isaias","morph":"탈격 단수 남성 (1변화)","syntax_role":"in의 목적어 — 문헌 소재를 나타내는 장소탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":5,"surface":"prophētā","lemma_id":"lem:propheta","morph":"탈격 단수 남성 (1변화)","syntax_role":"Isaiā와 동격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":6,"surface":"Ecce","lemma_id":"lem:ecce","morph":"감탄사","syntax_role":"인용문 도입","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":7,"surface":"ego","lemma_id":"lem:ego","morph":"주격 단수 (1인칭 대명사)","syntax_role":"mittō의 주어 — 대조 강조를 위해 명시","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":8,"surface":"mittō","lemma_id":"lem:mitto","morph":"직설법 현재 능동 1인칭 단수 (3변화 동사)","syntax_role":"인용문 주절의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":9,"surface":"angelum","lemma_id":"lem:angelus","morph":"대격 단수 남성 (2변화)","syntax_role":"mittō의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":10,"surface":"meum","lemma_id":"lem:meus","morph":"대격 단수 남성 (1·2변화 형용사)","syntax_role":"angelum 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":11,"surface":"ante","lemma_id":"lem:ante","morph":"전치사 (+대격)","syntax_role":"faciem tuam을 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":12,"surface":"faciem","lemma_id":"lem:facies","morph":"대격 단수 여성 (5변화)","syntax_role":"ante의 목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":13,"surface":"tuam","lemma_id":"lem:tuus","morph":"대격 단수 여성 (1·2변화 형용사)","syntax_role":"faciem 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":14,"surface":"quī","lemma_id":"lem:qui","morph":"주격 단수 남성 (관계대명사)","syntax_role":"관계절의 주어 — 선행사 angelum","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":15,"surface":"praeparābit","lemma_id":"lem:praeparo","morph":"직설법 미래 능동 3인칭 단수 (1변화 동사)","syntax_role":"관계절의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":16,"surface":"viam","lemma_id":"lem:via","morph":"대격 단수 여성 (1변화)","syntax_role":"praeparābit의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":17,"surface":"tuam","lemma_id":"lem:tuus","morph":"대격 단수 여성 (1·2변화 형용사)","syntax_role":"viam 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":18,"surface":"ante","lemma_id":"lem:ante","morph":"전치사 (+대격)","syntax_role":"tē를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-2","index":19,"surface":"tē","lemma_id":"lem:tu","morph":"대격 단수 (2인칭 대명사)","syntax_role":"ante의 목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":0,"surface":"Vōx","lemma_id":"lem:vox","morph":"주격 단수 여성 (3변화)","syntax_role":"정동사 없는 표제문의 중심어 (표제 주격)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":1,"surface":"clāmantis","lemma_id":"lem:clamo","morph":"현재능동분사 소유격 단수 남성 (1변화 동사)","syntax_role":"명사적으로 쓰인 분사 — Vōx를 한정하는 주어적 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":2,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"dēsertō를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":3,"surface":"dēsertō","lemma_id":"lem:desertum","morph":"탈격 단수 중성 (2변화)","syntax_role":"장소탈격 — clāmantis를 한정 (구두점에 따라 Parāte 소속 가능)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":4,"surface":"Parāte","lemma_id":"lem:paro","morph":"명령법 현재 능동 2인칭 복수 (1변화 동사)","syntax_role":"인용문의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":5,"surface":"viam","lemma_id":"lem:via","morph":"대격 단수 여성 (1변화)","syntax_role":"Parāte의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":6,"surface":"Dominī","lemma_id":"lem:dominus","morph":"소유격 단수 남성 (2변화)","syntax_role":"viam을 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":7,"surface":"rēctās","lemma_id":"lem:rectus","morph":"대격 복수 여성 (1·2변화 형용사)","syntax_role":"sēmitās의 서술 대격 — facite의 결과를 서술","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":8,"surface":"facite","lemma_id":"lem:facio","morph":"명령법 현재 능동 2인칭 복수 (3-io변화 동사)","syntax_role":"인용문의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":9,"surface":"sēmitās","lemma_id":"lem:semita","morph":"대격 복수 여성 (1변화)","syntax_role":"facite의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-3","index":10,"surface":"eius","lemma_id":"lem:is","morph":"소유격 단수 남성 (지시대명사)","syntax_role":"sēmitās를 한정하는 소유격 — Dominī를 되받음","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":0,"surface":"Fuit","lemma_id":"lem:sum","morph":"직설법 완료 능동 3인칭 단수 (불규칙 동사 sum)","syntax_role":"주절의 정동사 — 뒤의 분사들과 결합해 우언적 서술을 이룸","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":1,"surface":"Iōhannēs","lemma_id":"lem:Iohannes","morph":"주격 단수 남성 (그리스어계 3변화)","syntax_role":"주어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":2,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"dēsertō를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":3,"surface":"dēsertō","lemma_id":"lem:desertum","morph":"탈격 단수 중성 (2변화)","syntax_role":"장소탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":4,"surface":"baptizāns","lemma_id":"lem:baptizo","morph":"현재능동분사 주격 단수 남성 (1변화 동사)","syntax_role":"주어 Iōhannēs를 서술하는 분사 — Fuit와 결합","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":5,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 분사를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":6,"surface":"praedicāns","lemma_id":"lem:praedico1","morph":"현재능동분사 주격 단수 남성 (1변화 동사)","syntax_role":"주어 Iōhannēs를 서술하는 분사 — baptizāns와 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":7,"surface":"baptismum","lemma_id":"lem:baptismus","morph":"대격 단수 남성 (2변화)","syntax_role":"praedicāns의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":8,"surface":"paenitentiae","lemma_id":"lem:paenitentia","morph":"소유격 단수 여성 (1변화)","syntax_role":"baptismum을 한정하는 성질 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":9,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+대격)","syntax_role":"remissiōnem을 지배 — 목적·귀결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":10,"surface":"remissiōnem","lemma_id":"lem:remissio","morph":"대격 단수 여성 (3변화)","syntax_role":"in의 목적어 — 세례가 지향하는 결과","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-4","index":11,"surface":"peccātōrum","lemma_id":"lem:peccatum","morph":"소유격 복수 중성 (2변화)","syntax_role":"remissiōnem을 한정하는 목적어적 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":0,"surface":"Et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"문장 연결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":1,"surface":"ēgrediēbātur","lemma_id":"lem:egredior","morph":"직설법 미완료 3인칭 단수 (디포넌트, 3-io변화 동사)","syntax_role":"정동사 — 가장 가까운 주어 regiō와 수 일치","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":2,"surface":"ad","lemma_id":"lem:ad","morph":"전치사 (+대격)","syntax_role":"eum을 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":3,"surface":"eum","lemma_id":"lem:is","morph":"대격 단수 남성 (지시대명사)","syntax_role":"ad의 목적어 — 요한을 가리킴","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":4,"surface":"omnis","lemma_id":"lem:omnis","morph":"주격 단수 여성 (3변화 형용사)","syntax_role":"regiō 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":5,"surface":"Iūdaeae","lemma_id":"lem:Iudaea","morph":"소유격 단수 여성 (1변화)","syntax_role":"regiō를 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":6,"surface":"regiō","lemma_id":"lem:regio","morph":"주격 단수 여성 (3변화)","syntax_role":"ēgrediēbātur의 주어 (첫 번째)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":7,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 주어를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":8,"surface":"Ierosolymītae","lemma_id":"lem:Ierosolymita","morph":"주격 복수 남성 (1변화)","syntax_role":"ēgrediēbātur의 주어 (두 번째)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":9,"surface":"ūniversī","lemma_id":"lem:universus","morph":"주격 복수 남성 (1·2변화 형용사)","syntax_role":"Ierosolymītae 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":10,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 정동사를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":11,"surface":"baptizābantur","lemma_id":"lem:baptizo","morph":"직설법 미완료 수동 3인칭 복수 (1변화 동사)","syntax_role":"정동사 — 앞의 두 주어 전체를 받아 복수","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":12,"surface":"ab","lemma_id":"lem:a","morph":"전치사 (+탈격)","syntax_role":"illō를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":13,"surface":"illō","lemma_id":"lem:ille","morph":"탈격 단수 남성 (지시대명사)","syntax_role":"행위자탈격 — 세례를 주는 주체","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":14,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"flūmine를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":15,"surface":"Iordānis","lemma_id":"lem:Iordanes","morph":"소유격 단수 남성 (그리스어계 3변화)","syntax_role":"flūmine를 한정하는 동격적 소유격 — '요단이라는 강'","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":16,"surface":"flūmine","lemma_id":"lem:flumen","morph":"탈격 단수 중성 (3변화)","syntax_role":"장소탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":17,"surface":"cōnfitentēs","lemma_id":"lem:confiteor","morph":"현재능동분사 주격 복수 남성 (디포넌트, 2변화 동사)","syntax_role":"주어를 서술하는 분사 — 세례와 동시에 일어나는 동작","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":18,"surface":"peccāta","lemma_id":"lem:peccatum","morph":"대격 복수 중성 (2변화)","syntax_role":"cōnfitentēs의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-5","index":19,"surface":"sua","lemma_id":"lem:suus","morph":"대격 복수 중성 (재귀 소유형용사)","syntax_role":"peccāta 수식 — 소유자가 주어이므로 재귀형","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":0,"surface":"Et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"문장 연결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":1,"surface":"erat","lemma_id":"lem:sum","morph":"직설법 미완료 능동 3인칭 단수 (불규칙 동사 sum)","syntax_role":"vestītus와 결합한 정동사 — 상태 서술","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":2,"surface":"Iōhannēs","lemma_id":"lem:Iohannes","morph":"주격 단수 남성 (그리스어계 3변화)","syntax_role":"주어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":3,"surface":"vestītus","lemma_id":"lem:vestio","morph":"완료수동분사 주격 단수 남성 (PPP, 4변화 동사)","syntax_role":"주격보어 — erat와 결합해 '옷 입혀져 있었다'는 상태를 나타냄","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":4,"surface":"pilīs","lemma_id":"lem:pilus","morph":"탈격 복수 남성 (2변화)","syntax_role":"수단탈격 — vestītus에 딸림","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":5,"surface":"camēlī","lemma_id":"lem:camelus","morph":"소유격 단수 남성 (2변화)","syntax_role":"pilīs를 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":6,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"pilīs와 zōnā를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":7,"surface":"zōnā","lemma_id":"lem:zona","morph":"탈격 단수 여성 (1변화)","syntax_role":"수단탈격 — pilīs와 병렬 (주격 독법도 가능, uncertain 참조)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":8,"surface":"pellīceā","lemma_id":"lem:pelliceus","morph":"탈격 단수 여성 (1·2변화 형용사)","syntax_role":"zōnā 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":9,"surface":"circā","lemma_id":"lem:circa","morph":"전치사 (+대격)","syntax_role":"lumbōs를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":10,"surface":"lumbōs","lemma_id":"lem:lumbus","morph":"대격 복수 남성 (2변화)","syntax_role":"circā의 목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":11,"surface":"eius","lemma_id":"lem:is","morph":"소유격 단수 남성 (지시대명사)","syntax_role":"lumbōs를 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":12,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"새 절을 연결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":13,"surface":"locustās","lemma_id":"lem:locusta","morph":"대격 복수 여성 (1변화)","syntax_role":"edēbat의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":14,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 목적어를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":15,"surface":"mel","lemma_id":"lem:mel","morph":"대격 단수 중성 (3변화)","syntax_role":"edēbat의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":16,"surface":"silvestre","lemma_id":"lem:silvester","morph":"대격 단수 중성 (3변화 형용사)","syntax_role":"mel 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-6","index":17,"surface":"edēbat","lemma_id":"lem:edo","morph":"직설법 미완료 능동 3인칭 단수 (불규칙 동사 edō)","syntax_role":"정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":0,"surface":"Et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"문장 연결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":1,"surface":"praedicābat","lemma_id":"lem:praedico1","morph":"직설법 미완료 능동 3인칭 단수 (1변화 동사)","syntax_role":"주절의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":2,"surface":"dīcēns","lemma_id":"lem:dico","morph":"현재능동분사 주격 단수 남성 (3변화 동사)","syntax_role":"주어를 서술하는 분사 — 직접화법을 도입","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":3,"surface":"Venit","lemma_id":"lem:venio","morph":"직설법 현재 능동 3인칭 단수 (4변화 동사)","syntax_role":"인용문 주절의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":4,"surface":"fortior","lemma_id":"lem:fortis","morph":"비교급 주격 단수 남성 (3변화 형용사의 비교급)","syntax_role":"Venit의 주어 — 명사적으로 쓰인 형용사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":5,"surface":"post","lemma_id":"lem:post","morph":"전치사 (+대격)","syntax_role":"mē를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":6,"surface":"mē","lemma_id":"lem:ego","morph":"대격 단수 (1인칭 대명사)","syntax_role":"post의 목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":7,"surface":"cuius","lemma_id":"lem:qui","morph":"소유격 단수 남성 (관계대명사)","syntax_role":"calceāmentōrum을 한정하는 소유격 — 선행사 fortior, 뒤의 eius가 중복 지시","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":8,"surface":"nōn","lemma_id":"lem:non","morph":"부사","syntax_role":"sum dignus를 부정","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":9,"surface":"sum","lemma_id":"lem:sum","morph":"직설법 현재 능동 1인칭 단수 (불규칙 동사 sum)","syntax_role":"관계절의 정동사 (연결동사)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":10,"surface":"dignus","lemma_id":"lem:dignus","morph":"주격 단수 남성 (1·2변화 형용사)","syntax_role":"주격보어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":11,"surface":"prōcumbēns","lemma_id":"lem:procumbo","morph":"현재능동분사 주격 단수 남성 (3변화 동사)","syntax_role":"주어를 서술하는 분사 — 부대상황","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":12,"surface":"solvere","lemma_id":"lem:solvo","morph":"현재 능동 부정사 (3변화 동사)","syntax_role":"dignus를 한정하는 설명적 부정사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":13,"surface":"corrigiam","lemma_id":"lem:corrigia","morph":"대격 단수 여성 (1변화)","syntax_role":"solvere의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":14,"surface":"calceāmentōrum","lemma_id":"lem:calceamentum","morph":"소유격 복수 중성 (2변화)","syntax_role":"corrigiam을 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-7","index":15,"surface":"eius","lemma_id":"lem:is","morph":"소유격 단수 남성 (지시대명사)","syntax_role":"calceāmentōrum을 한정 — cuius와 같은 대상을 중복 지시","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":0,"surface":"Ego","lemma_id":"lem:ego","morph":"주격 단수 (1인칭 대명사)","syntax_role":"주어 — ille와 대조하기 위해 명시","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":1,"surface":"baptizāvī","lemma_id":"lem:baptizo","morph":"직설법 완료 능동 1인칭 단수 (1변화 동사)","syntax_role":"정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":2,"surface":"vōs","lemma_id":"lem:tu","morph":"대격 복수 (2인칭 대명사)","syntax_role":"baptizāvī의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":3,"surface":"aquā","lemma_id":"lem:aqua","morph":"탈격 단수 여성 (1변화)","syntax_role":"수단탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":4,"surface":"ille","lemma_id":"lem:ille","morph":"주격 단수 남성 (지시대명사)","syntax_role":"주어 — Ego와 대조","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":5,"surface":"vērō","lemma_id":"lem:vero","morph":"부사 (후치 접속 부사)","syntax_role":"앞 절과의 대조를 표시하는 논증 연결어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":6,"surface":"baptizābit","lemma_id":"lem:baptizo","morph":"직설법 미래 능동 3인칭 단수 (1변화 동사)","syntax_role":"정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":7,"surface":"vōs","lemma_id":"lem:tu","morph":"대격 복수 (2인칭 대명사)","syntax_role":"baptizābit의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":8,"surface":"Spīritū","lemma_id":"lem:spiritus","morph":"탈격 단수 남성 (4변화)","syntax_role":"수단탈격 — aquā와 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-8","index":9,"surface":"Sānctō","lemma_id":"lem:sanctus","morph":"탈격 단수 남성 (1·2변화 형용사)","syntax_role":"Spīritū 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":0,"surface":"Et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"문장 연결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":1,"surface":"factum","lemma_id":"lem:facio","morph":"완료수동분사 주격 단수 중성 (PPP, 3-io변화 동사)","syntax_role":"est와 결합해 완료 정동사를 이룸 — 비인칭","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":2,"surface":"est","lemma_id":"lem:sum","morph":"직설법 현재 능동 3인칭 단수 (불규칙 동사 sum)","syntax_role":"factum과 결합한 조동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":3,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"diēbus illīs를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":4,"surface":"diēbus","lemma_id":"lem:dies","morph":"탈격 복수 남성 (5변화)","syntax_role":"시간탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":5,"surface":"illīs","lemma_id":"lem:ille","morph":"탈격 복수 남성 (지시형용사)","syntax_role":"diēbus 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":6,"surface":"vēnit","lemma_id":"lem:venio","morph":"직설법 완료 능동 3인칭 단수 (4변화 동사)","syntax_role":"정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":7,"surface":"Iēsūs","lemma_id":"lem:Iesus","morph":"주격 단수 남성 (그리스어계 불규칙 변화)","syntax_role":"주어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":8,"surface":"ā","lemma_id":"lem:a","morph":"전치사 (+탈격)","syntax_role":"Nazareth를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":9,"surface":"Nazareth","lemma_id":"lem:Nazareth","morph":"무변화 고유명사 (탈격 상당)","syntax_role":"ā의 목적어 — 분리탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":10,"surface":"Galilaeae","lemma_id":"lem:Galilaea","morph":"소유격 단수 여성 (1변화)","syntax_role":"Nazareth를 한정하는 소유격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":11,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 정동사를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":12,"surface":"baptizātus","lemma_id":"lem:baptizo","morph":"완료수동분사 주격 단수 남성 (PPP, 1변화 동사)","syntax_role":"est와 결합해 완료 수동 정동사를 이룸","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":13,"surface":"est","lemma_id":"lem:sum","morph":"직설법 현재 능동 3인칭 단수 (불규칙 동사 sum)","syntax_role":"baptizātus와 결합한 조동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":14,"surface":"ā","lemma_id":"lem:a","morph":"전치사 (+탈격)","syntax_role":"Iōhanne를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":15,"surface":"Iōhanne","lemma_id":"lem:Iohannes","morph":"탈격 단수 남성 (그리스어계 3변화)","syntax_role":"행위자탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":16,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"Iordāne를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-9","index":17,"surface":"Iordāne","lemma_id":"lem:Iordanes","morph":"탈격 단수 남성 (그리스어계 3변화)","syntax_role":"장소탈격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":0,"surface":"Et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"문장 연결","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":1,"surface":"statim","lemma_id":"lem:statim","morph":"부사","syntax_role":"vīdit를 수식","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":2,"surface":"ascendēns","lemma_id":"lem:ascendo","morph":"현재능동분사 주격 단수 남성 (3변화 동사)","syntax_role":"주어(예수)를 서술하는 분사 — 주동사와 동시에 일어남","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":3,"surface":"dē","lemma_id":"lem:de","morph":"전치사 (+탈격)","syntax_role":"aquā를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":4,"surface":"aquā","lemma_id":"lem:aqua","morph":"탈격 단수 여성 (1변화)","syntax_role":"분리탈격 — 올라오는 출발점","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":5,"surface":"vīdit","lemma_id":"lem:video","morph":"직설법 완료 능동 3인칭 단수 (2변화 동사)","syntax_role":"주절의 정동사","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":6,"surface":"caelōs","lemma_id":"lem:caelum","morph":"대격 복수 남성 (2변화, 복수에서 남성)","syntax_role":"vīdit의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":7,"surface":"apertōs","lemma_id":"lem:aperio","morph":"완료수동분사 대격 복수 남성 (PPP, 4변화 동사)","syntax_role":"caelōs의 서술 대격 — 지각동사 vīdit에 딸림","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":8,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 목적어를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":9,"surface":"Spīritum","lemma_id":"lem:spiritus","morph":"대격 단수 남성 (4변화)","syntax_role":"vīdit의 직접목적어","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":10,"surface":"tamquam","lemma_id":"lem:tamquam","morph":"비교 접속사","syntax_role":"columbam을 비교 대상으로 도입","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":11,"surface":"columbam","lemma_id":"lem:columba","morph":"대격 단수 여성 (1변화)","syntax_role":"tamquam이 이끄는 비교 대상 — Spīritum과 같은 격","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":12,"surface":"dēscendentem","lemma_id":"lem:descendo","morph":"현재능동분사 대격 단수 남성 (3변화 동사)","syntax_role":"Spīritum을 서술하는 분사 (남성이므로 여성 columbam이 아님)","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":13,"surface":"et","lemma_id":"lem:et","morph":"등위접속사","syntax_role":"두 분사를 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":14,"surface":"manentem","lemma_id":"lem:maneo","morph":"현재능동분사 대격 단수 남성 (2변화 동사)","syntax_role":"Spīritum을 서술하는 분사 — dēscendentem과 병렬","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":15,"surface":"in","lemma_id":"lem:in","morph":"전치사 (+탈격)","syntax_role":"ipsō를 지배","greek_align":null,"greek_lemma":null},{"sentence_id":"mk-1-10","index":16,"surface":"ipsō","lemma_id":"lem:ipse","morph":"탈격 단수 남성 (강조대명사)","syntax_role":"in의 목적어 — 예수를 가리킴","greek_align":null,"greek_lemma":null}],"scripture_citations":[{"id":"cit-mk-1-2-01","sentence_id":"mk-1-2","token_range":[6,19],"ref":"Mal 3,1 + Ex 23,20","source_version":"lxx","verbatim":false,"divergence_ko":"두 구절의 결합이다. '내 사자를 보낸다'는 Mal 3,1에서, '네 얼굴 앞에'는 Ex 23,20에서 왔다. 결정적 변개는 인칭이다 — Mal 3,1에서 하나님은 '내 얼굴 앞에'(ante faciem meam) 길을 예비한다고 하는데, 마가는 '네 얼굴 앞에'(ante faciem tuam)로 바꿔 메시아를 향한 말로 돌린다. 문법 문제가 아니라 신학적 재적용이다.","vulgate_parallel":"불가타 Mal 3,1: Ecce ego mitto angelum meum, et praeparabit viam ante faciem meam. — 불가타 구약은 히브리어에서, 마가복음은 그리스어에서 옮겼으므로 같은 구절이 라틴어로 두 번, 서로 다르게 나타난다.","polemical":false,"verified":false},{"id":"cit-mk-1-3-01","sentence_id":"mk-1-3","token_range":[0,10],"ref":"Is 40,3","source_version":"lxx","verbatim":false,"divergence_ko":"불가타 이사야서에는 in solitudine(광야에서)가 한 번 더 들어가고 마지막이 Dei nostri(우리 하나님의)인데, 마가는 그 자리를 eius(그의)로 줄였다. 구두점 문제(in dēsertō가 어디에 붙는가)도 여기서 갈린다.","vulgate_parallel":"불가타 Is 40,3: Vox clamantis in deserto: Parate viam Domini, rectas facite in solitudine semitas Dei nostri.","polemical":false,"verified":false}],"question_banks":[{"sentence_id":"mk-1-1","items":[{"q_ko":"이 문장에는 정동사가 하나도 없다. 어떻게 읽어야 하는가?","a_ko":"책의 표제(標題)이기 때문이다. Initium이 주격으로 홀로 서서 '~의 시작'이라는 제목 구실을 한다. 정동사를 찾으려 하지 말고 '여기서부터가 ~의 시작이다'로 읽는다. 마가복음 전체의 제목 줄이다."},{"q_ko":"Iēsū는 무슨 형태인가? 왜 2변화 소유격 -ī가 아닌가?","a_ko":"소유격 단수다. Iēsūs는 그리스어 Ἰησοῦς를 그대로 받아들인 이름이라 라틴어 5변화 어느 쪽에도 들어가지 않는다. 소유격·여격·탈격이 모두 Iēsū 한 형태이고, 대격만 Iēsum, 주격만 Iēsūs다. 형태로는 격을 못 가리고 문맥으로 판단해야 한다."},{"q_ko":"소유격이 evangeliī – Iēsū – Chrīstī – Fīliī – Deī로 다섯 개나 이어진다. 각각 무엇에 걸리는가?","a_ko":"evangeliī는 Initium에, Iēsū는 evangeliī에, Chrīstī는 Iēsū와 동격, Fīliī는 Iēsū Chrīstī 전체와 동격, Deī는 Fīliī에 걸린다. 즉 사슬 세 마디(Initium ← evangeliī ← Iēsū)에 동격 두 개가 얹힌 구조다. 소유격이 줄줄이 나오면 먼저 '동격'인지 '한정'인지부터 갈라야 한다."},{"q_ko":"evangeliī Iēsū Chrīstī는 '예수께서 전하신 복음'인가, '예수에 관한 복음'인가?","a_ko":"형태만으로는 결정되지 않는다. 주어적 소유격으로 보면 앞의 뜻, 목적어적 소유격으로 보면 뒤의 뜻이다. 마가복음은 예수의 생애를 서술하는 책이므로 목적어적 소유격으로 읽는 것이 다수설이나, 저자가 양쪽을 겸하도록 썼다는 견해도 있다. 이 항목은 확정하지 않는다."},{"q_ko":"Fīliī Deī는 무엇과 동격인가? Chrīstī와만 동격일 수는 없는가?","a_ko":"Iēsū Chrīstī 전체와 동격이다. 셋 다 소유격 단수 남성이라 형태로는 구별되지 않지만, 의미상 '예수 그리스도 = 하나님의 아들'이므로 이름 전체를 받는다."},{"q_ko":"Initium이 주격인 것은 어떻게 아는가? 대격일 수는 없는가?","a_ko":"2변화 중성이므로 주격과 대격의 형태가 같아 형태로는 구별되지 않는다. 그러나 지배할 동사도 전치사도 없으므로 대격일 근거가 없고, 표제 주격으로 읽는다. 중성 명사에서 주격·대격 동형은 항상 이런 식으로 문맥이 결정한다."},{"q_ko":"evangelium은 어디서 온 단어인가?","a_ko":"그리스어 εὐαγγέλιον(좋은 소식)의 음차다. 라틴어 고유 어휘가 아니므로 고전 라틴어 어원 분석이 통하지 않고, 첫 음절 e의 길이도 표기 전통에 따라 갈린다. 신약 라틴어에는 이런 그리스어 차용어가 많다."}]},{"sentence_id":"mk-1-2","items":[{"q_ko":"scrīptum est는 어느 시제·태인가? 왜 두 단어인가?","a_ko":"완료 수동 3인칭 단수다. 라틴어의 완료 계열 수동은 언제나 '완료수동분사(PPP) + sum'의 두 단어로 만든다. scrībō의 PPP scrīptus에 est가 붙었다. 한 단어짜리 수동 어미를 찾으면 안 된다."},{"q_ko":"scrīptum이 중성인 이유는? 무엇에 성을 맞췄는가?","a_ko":"맞출 주어가 없기 때문이다. '기록되어 있다'는 비인칭 표현이라 성을 결정할 명사가 없고, 이럴 때 라틴어는 중성 단수를 쓴다. 뒤의 인용문 전체가 막연한 주어 노릇을 한다."},{"q_ko":"라틴어는 인칭대명사를 보통 생략하는데, ego가 왜 명시되었는가?","a_ko":"강조 때문이다. mittō의 어미 -ō만으로 1인칭 단수는 이미 확정되므로 ego는 문법상 불필요하다. 굳이 쓰면 '다른 누구도 아닌 내가'라는 대조가 생긴다. 히브리어 원문의 강조 대명사를 옮긴 것이기도 하다."},{"q_ko":"quī의 선행사는 무엇인가? 성·수·격은 각각 어디서 오는가?","a_ko":"선행사는 angelum이다. 관계대명사는 성과 수를 선행사에서(남성 단수), 격은 자기가 속한 관계절 안에서의 역할로부터(praeparābit의 주어이므로 주격) 가져온다. 이 두 출처를 나눠 보는 것이 관계대명사 독해의 전부다."},{"q_ko":"in Isaiā prophētā가 탈격인 이유는? in이 대격을 지배할 때와 어떻게 다른가?","a_ko":"정지된 위치를 나타내므로 탈격이다. in + 탈격은 '~ 안에(서)', in + 대격은 '~ 안으로(향하여)'다. 여기서는 이사야서라는 문헌 '안에' 기록되어 있다는 뜻이므로 탈격이다. 4절의 in remissiōnem과 대조해 보라."},{"q_ko":"prophētā는 -a로 끝나는 1변화인데 왜 남성인가?","a_ko":"그리스어 -της로 끝나는 남성 명사를 라틴어 1변화로 받아들였기 때문이다. nauta, agricola, poēta와 같은 부류다. 형태는 1변화지만 수식하는 형용사는 남성 형태를 써야 한다. 사전 표제어에 예외 표시가 필요한 단어다."},{"q_ko":"ante faciem tuam을 직역하면 '네 얼굴 앞에'다. 무슨 뜻인가?","a_ko":"히브리어 관용구 לִפְנֵי(~의 얼굴 앞에 = ~보다 앞서)를 그대로 옮긴 것이다. 라틴어 자체의 표현이 아니라 번역체다. 불가타에는 이런 히브리어 직역 관용구가 자주 나오므로 라틴어 문법으로만 풀려 하지 말고 셈어 관용구를 의심해야 한다."},{"q_ko":"praeparābit의 시제는? -bit는 어느 변화 동사의 표지인가?","a_ko":"미래다. -bō/-bis/-bit 계열의 미래 어미는 1변화·2변화 동사에만 쓰인다. praeparō는 1변화이므로 여기에 해당한다. 3변화·4변화 동사는 -am/-ēs/-et 계열을 쓰므로, -bit를 보면 곧바로 1변화나 2변화로 좁힐 수 있다."},{"q_ko":"마가는 이 인용을 '이사야 예언자 안에'라고 밝히는데, 실제로는 말라기와 출애굽기가 섞여 있다. 라틴어 본문은 이 문제를 어떻게 처리하는가?","a_ko":"처리하지 않는다. 클레멘스판과 슈투트가르트판 모두 in Isaia propheta(단수)로 읽는다. 반면 Textus Receptus 계열 그리스어는 '예언자들 안에'(복수)로 읽고 KJV도 그렇게 옮긴다. 인용 내용을 보면 복수형이 사실관계에 맞으므로, 단수형은 필사자가 고치기 어려운 쪽, 곧 더 원본에 가까운 독법으로 평가된다. 흥미로운 점은 이 자리에서 여러분이 배우는 라틴어 본문이 오웬이 그 순수성을 변호한 Textus Receptus와 갈린다는 것이다. '성경 한 권'이 아니라 여러 본문 전통이 있다는 사실을 처음 만나는 자리다."}]},{"sentence_id":"mk-1-3","items":[{"q_ko":"clāmantis는 무슨 형태이며 왜 소유격인가?","a_ko":"현재능동분사의 소유격 단수다. 분사가 명사처럼 쓰여 '외치는 자'를 뜻하고, 그것이 Vōx를 한정하는 소유격으로 놓였다. 분사는 형용사이므로 이렇게 단독 명사 노릇을 할 수 있다."},{"q_ko":"Vōx clāmantis의 소유격은 주어적인가 목적어적인가?","a_ko":"주어적 소유격이다. '외치는 자가 내는 소리'이므로 clāmantis가 vōx라는 행위의 주체다. 만약 목적어적이라면 '외치는 자를 향한 소리'가 되어 말이 되지 않는다."},{"q_ko":"in dēsertō는 clāmantis에 붙는가, Parāte에 붙는가? 뜻이 어떻게 달라지는가?","a_ko":"원문에 구두점이 없어 확정되지 않는다. clāmantis에 붙이면 '광야에서 외치는 자의 소리'가 되어 외치는 장소가 광야이고, Parāte에 붙이면 '외치는 자의 소리: 광야에서 주의 길을 예비하라'가 되어 길을 닦는 장소가 광야다. 이사야 40:3의 히브리어 대구 구조는 후자를 지지하지만, 복음서 저자들은 전자로 읽어 세례 요한에게 적용했다. 이 문장은 마크론이 아니라 구두점이 뜻을 가르는 사례다."},{"q_ko":"rēctās는 sēmitās를 그냥 수식하는가?","a_ko":"아니다. 서술 대격이다. '이미 곧은 지름길들을 만들라'가 아니라 '지름길들을 곧게 만들라'는 뜻이다. facite류 동사는 '목적어 + 서술 대격'을 취해 '~을 ~한 상태로 만들다'를 나타낸다. 어순(rēctās facite sēmitās)이 보어를 앞으로 끌어내 강조하고 있다."},{"q_ko":"Parāte와 facite는 각각 몇 변화 동사인가? 어미만으로 구별되는가?","a_ko":"Parāte는 1변화(parō, parāre), facite는 3-io변화(faciō, facere)다. 명령법 2인칭 복수 어미는 어간모음에 -te를 붙인 것이므로 어간모음이 곧 단서다. -āte면 1변화, -ite면 3변화나 3-io변화, -ēte면 2변화, -īte면 4변화다."},{"q_ko":"faciō가 3-io변화라는 것은 어떻게 아는가?","a_ko":"1인칭 단수가 -iō로 끝나는데 부정사가 -ere(단음 e)이기 때문이다. 4변화라면 부정사가 -īre여야 한다. faciō, facere가 그래서 3-io변화다. 명령법 단수 fac은 추가로 불규칙(어미 -e 탈락)이라 따로 외워야 한다."},{"q_ko":"eius를 쓰고 suās를 쓰지 않은 이유는?","a_ko":"sēmitās의 소유자가 문장의 주어가 아니기 때문이다. 재귀 소유형용사 suus는 소유자가 그 절의 주어일 때만 쓴다. 여기서 명령의 주어는 '너희'이고 지름길의 소유자는 Dominus이므로 재귀가 아닌 eius를 쓴다. 6절의 lumbōs eius도 같은 원리다."},{"q_ko":"Vōx는 3변화 명사인데 주격에 어미가 보이지 않는다. 어간을 어떻게 찾는가?","a_ko":"소유격 vōcis에서 어미 -is를 떼면 어간 vōc-이 나온다. 3변화 명사는 주격이 어간을 감추므로 반드시 소유격을 함께 외워야 한다. vōx는 어간 vōc-에 주격 -s가 붙어 c+s가 x로 합쳐진 형태다."}]},{"sentence_id":"mk-1-4","items":[{"q_ko":"Fuit ... baptizāns는 왜 단순히 baptizābat가 아닌가?","a_ko":"sum + 현재능동분사의 우언적 표현이다. 그리스어 원문의 ἐγένετο ... βαπτίζων 구조를 직역한 것으로, 라틴어 고유 어법이라기보다 번역체다. 뜻은 '세례를 주는 자로 나타났다 / 세례를 주고 있었다'로, 지속되는 활동을 부각한다. 불가타에서 sum + 분사 조합이 보이면 그리스어 우언법의 직역을 의심하라."},{"q_ko":"Fuit는 어떤 동사의 어떤 형태인가?","a_ko":"sum의 직설법 완료 능동 3인칭 단수다. sum은 불규칙 동사이며 완료 어간은 fu-로 현재 어간(es-/s-)과 전혀 다르다. fuī, fuistī, fuit로 이어지는 완료 계열은 통째로 외워야 한다."},{"q_ko":"baptizāns와 praedicāns가 주격 단수 남성인 근거는?","a_ko":"주어 Iōhannēs와 성·수·격을 일치시켰기 때문이다. 분사는 형용사이므로 자기가 서술하는 명사에 맞춘다. 만약 -antem이었다면 대격이 되어 다른 명사를 수식하게 된다. 분사를 만나면 먼저 어미로 격을 읽고 그 격에 맞는 명사를 찾는 순서로 처리한다."},{"q_ko":"in remissiōnem은 왜 탈격이 아니라 대격인가?","a_ko":"in + 대격은 방향·목적·귀결을 나타내기 때문이다. 회개의 세례가 '죄 사함이라는 결과를 향하여' 주어진다는 뜻이다. 2절의 in Isaiā prophētā(탈격, 정지된 위치)와 비교하면 같은 in의 두 얼굴이 선명해진다."},{"q_ko":"baptismum paenitentiae의 소유격은 어떤 종류인가?","a_ko":"성질 소유격으로 보는 것이 무난하다. '회개라는 성격을 지닌 세례'라는 뜻이다. 목적어적 소유격('회개를 낳는 세례')으로 읽는 견해도 있으며, 이 차이는 신학적으로 작지 않다. 3c층 어휘와 마주칠 때 소유격의 종류가 전통을 가르는 일이 잦다."},{"q_ko":"remissiōnem peccātōrum의 소유격은?","a_ko":"목적어적 소유격이다. remissiō는 remittō(놓아주다)의 명사형이므로 '죄들을 놓아줌'이 된다. 즉 peccāta가 remittō의 목적어에 해당한다. 동사에서 온 명사 뒤의 소유격은 먼저 주어적인지 목적어적인지를 물어야 한다."},{"q_ko":"remissiō peccātōrum은 사도신경에도 나온다. 형태는 어떻게 달라지는가?","a_ko":"사도신경에서는 crēdō ... remissiōnem peccātōrum으로 crēdō의 목적어가 되어 대격이다. 여기서는 in의 목적어라서 역시 대격이지만 이유가 다르다. 같은 어구라도 문장 안의 역할이 격을 결정한다는 점을 확인하기 좋은 대조다."},{"q_ko":"dēsertum은 원래 무슨 형태였는가?","a_ko":"dēserō(버리다)의 완료수동분사 dēsertus의 중성 단수형이 명사로 굳은 것이다. 직역하면 '버려진 것'이고, 여기서 '광야'라는 뜻이 나왔다. 분사가 명사로 굳는 현상은 라틴어에 흔하므로 낯선 -tum, -sum 명사를 만나면 원 동사를 찾아보는 습관을 들이라."}]},{"sentence_id":"mk-1-5","items":[{"q_ko":"주어가 regiō와 Ierosolymītae 둘인데 ēgrediēbātur는 왜 단수인가?","a_ko":"가장 가까운 주어 하나에만 수를 맞추는 어법이다. 동사가 주어들보다 앞에 놓이면 라틴어는 첫 번째 주어에 맞추는 일이 흔하다. 실제로 뒤의 baptizābantur는 두 주어를 다 받아 복수가 되었다. 같은 문장 안에서 단수와 복수가 나란히 나오는 것이 그 증거다."},{"q_ko":"ēgrediēbātur는 수동 어미인데 왜 능동으로 번역하는가?","a_ko":"ēgredior가 디포넌트 동사이기 때문이다. 형태는 수동, 뜻은 능동이다. 이런 동사는 수동 어미를 보고도 수동으로 옮기면 안 된다. 사전에 ēgredior, ēgredī, ēgressus sum처럼 1인칭이 -or로 끝나면 디포넌트다."},{"q_ko":"ēgredior는 몇 변화 동사인가?","a_ko":"3-io변화다. gradior(걷다)에 접두사 ē-가 붙은 것이고, gradior는 1인칭이 -ior인데 부정사가 -ī(gradī)로 짧아 4변화가 아니라 3-io변화로 분류된다. 미완료 어미가 -iēbātur가 되는 것도 3-io변화의 특징이다."},{"q_ko":"ab illō와 in Iordānis flūmine는 둘 다 탈격이다. 무엇이 다른가?","a_ko":"ab illō는 행위자탈격으로 수동태의 동작 주체를 가리키고, in flūmine는 장소탈격으로 사건이 일어난 곳을 가리킨다. 행위자탈격은 사람일 때 반드시 ā/ab를 붙이고, 사물이면 전치사 없이 수단탈격으로 쓴다. 8절의 aquā가 바로 그 전치사 없는 수단탈격이다."},{"q_ko":"미완료를 두 번(ēgrediēbātur, baptizābantur) 쓴 효과는?","a_ko":"한 번 일어난 사건이 아니라 되풀이되고 이어지던 상황을 그린다. 사람들이 계속 나아왔고 계속 세례를 받고 있었다는 뜻이다. 완료였다면 한 시점의 사건으로 끝난다. 서사 배경을 까는 자리에서 미완료가 쓰인 전형적인 예다."},{"q_ko":"cōnfitentēs는 디포넌트 동사의 분사인데 형태가 능동이다. 모순 아닌가?","a_ko":"모순이 아니다. 디포넌트 동사도 현재분사와 미래능동분사만은 능동형을 쓴다. 수동형이 없기 때문이 아니라, 이 두 분사에는 애초에 수동형 자체가 존재하지 않는다. 반대로 완료수동분사(cōnfessus)는 형태가 수동인데 뜻은 능동이라 또 뒤집힌다."},{"q_ko":"peccāta sua에서 왜 eius가 아니라 sua인가?","a_ko":"죄의 주인이 그 절의 주어(나아온 사람들)이기 때문이다. 재귀 소유형용사 suus는 소유자가 주어와 같을 때 쓴다. 만약 eōrum이었다면 제3자의 죄를 고백한다는 뜻이 된다. 3절의 sēmitās eius, 6절의 lumbōs eius와 정확히 반대 경우다."},{"q_ko":"omnis Iūdaeae regiō의 어순은 왜 이런가?","a_ko":"omnis는 regiō를 수식하고 Iūdaeae는 regiō를 한정하는데, 수식어가 피수식어를 앞뒤로 감싸는 대신 앞에 몰려 있다. 라틴어 어순은 자유롭지만 성·수·격 일치가 짝을 알려준다. omnis는 주격 단수 여성이므로 소유격 Iūdaeae가 아니라 주격 regiō에 걸린다는 것이 형태로 확정된다."},{"q_ko":"Iordānis flūmine의 소유격은 어떤 종류인가?","a_ko":"동격적 소유격이다. 강과 요단은 같은 대상이므로 '요단의 강'이 아니라 '요단이라는 강'으로 옮긴다. urbs Rōmae 같은 표현과 같은 부류다."}]},{"sentence_id":"mk-1-6","items":[{"q_ko":"erat vestītus는 과거완료 수동인가?","a_ko":"아니다. 형태만 보면 sum의 미완료 + 완료수동분사이므로 과거완료 수동으로 읽을 수 있지만, 여기서는 '옷 입혀져 있었다'는 지속된 상태를 서술한다. vestītus가 사실상 형용사처럼 굳어 주격보어로 기능하는 자리다. 이런 구별은 문맥으로만 가려진다."},{"q_ko":"pilīs는 어떤 탈격 용법인가?","a_ko":"수단탈격이다. 무엇으로 옷 입혀졌는가를 나타낸다. 사물이므로 전치사가 붙지 않는다. 5절의 ab illō(사람이므로 ab 필수)와 나란히 놓고 보면 규칙이 분명해진다."},{"q_ko":"zōnā pellīceā는 탈격인가 주격인가? 판단이 왜 중요한가?","a_ko":"확정되지 않았다. 탈격으로 읽으면 pilīs와 병렬하여 vestītus에 걸리고('낙타털과 가죽 띠로 옷 입혀져'), 주격으로 읽으면 erat를 다시 취하는 별개의 서술이 된다('가죽 띠가 그의 허리에 있었다'). 마크론 없이 zona pellicea로 적으면 두 독법이 구별되지 않으므로, 마크론을 붙이는 순간 파싱을 결정해 버리는 셈이다. 이 프로젝트에서 마크론 부여가 곧 해석 작업인 이유가 여기 있다."},{"q_ko":"lumbōs eius에서 suōs를 썼다면 뜻이 어떻게 달라지는가?","a_ko":"재귀형이므로 주어인 요한 자신의 허리가 되어 뜻은 사실상 같아진다. 그럼에도 eius를 쓴 것은 그리스어 원문 αὐτοῦ를 그대로 옮긴 번역체 때문이다. 불가타에서 재귀 규칙이 느슨해지는 대목을 확인해 두면 이후 독해가 편해진다."},{"q_ko":"mel의 격은 무엇이며 어떻게 아는가?","a_ko":"대격 단수다. mel은 3변화 중성이라 주격과 대격이 같지만, edēbat의 목적어 자리이고 앞의 locustās와 et로 병렬되므로 대격으로 확정된다. 중성 명사는 형태가 아니라 문장 내 역할로 격을 정한다."},{"q_ko":"silvestre가 -e로 끝나는 이유는?","a_ko":"3변화 형용사의 중성 단수 주격·대격 어미가 -e이기 때문이다. silvester, silvestris, silvestre의 세 형태 중 중성 단수형이며, 중성 명사 mel에 맞춘 것이다. 남성이었다면 silvestrem이 된다."},{"q_ko":"edō는 어떤 동사인가?","a_ko":"불규칙 동사다. edō, edere(또는 ēsse), ēdī, ēsus로 규칙형과 불규칙형이 병존한다. 다만 여기 나온 미완료 edēbat는 규칙형이라 어렵지 않다. sum, possum, eō, ferō, volō, nōlō, mālō, fīō와 함께 불규칙으로 분류해 외운다."},{"q_ko":"edēbat와 ēdit는 무엇이 다른가?","a_ko":"edēbat는 미완료로 '먹고 있었다, 늘 먹었다'는 반복·지속을, ēdit는 완료로 '먹었다'는 한 번의 사건을 나타낸다. 이 절은 요한의 평소 생활 방식을 그리므로 미완료라야 한다. 6절 전체가 미완료로 배경을 깔고 있다."},{"q_ko":"camēlus와 camēlī 중 어느 쪽이 표제어인가?","a_ko":"camēlus가 표제어이고 camēlī는 소유격 단수다. 다만 형태만으로는 소유격 단수와 주격 복수가 같으므로 구별해야 한다. 여기서는 pilīs를 한정하므로 소유격이다."}]},{"sentence_id":"mk-1-7","items":[{"q_ko":"Venit인가 Vēnit인가? 마크론 하나가 무엇을 바꾸는가?","a_ko":"여기서는 현재 venit다. 마크론이 없으면 직설법 현재 3인칭 단수, 있으면 직설법 완료 3인칭 단수가 되어 '온다'와 '왔다'가 갈린다. 이 구절은 앞으로 오실 분을 예고하는 대목이므로 현재라야 하고, 그리스어 원문도 현재(ἔρχεται)다. 9절의 vēnit와 나란히 놓고 외워 두면 좋다. 라틴어에서 모음 길이가 순수하게 문법을 가르는 대표 사례다."},{"q_ko":"fortior는 형용사인데 왜 주어 노릇을 하는가?","a_ko":"형용사가 명사처럼 단독으로 쓰였기 때문이다. '더 강한 [사람]'으로 읽으면 된다. 라틴어는 성·수·격이 어미에 드러나므로 명사를 생략해도 무엇을 가리키는지 알 수 있어 이런 용법이 자유롭다. 남성 단수이므로 '더 강한 남자 한 사람'이다."},{"q_ko":"fortior의 원급과 최상급은?","a_ko":"원급 fortis, 비교급 fortior(중성 fortius), 최상급 fortissimus다. 비교급 어미 -ior는 3변화로 변화하고, 최상급 -issimus는 1·2변화로 변화한다. 비교급만 변화 방식이 달라진다는 점을 놓치기 쉽다."},{"q_ko":"dignus는 보통 어떤 격을 지배하는가? cuius가 dignus에 딸리는가?","a_ko":"dignus는 본래 탈격을 지배한다(dignus laude). 따라서 소유격 cuius는 dignus의 지배를 받는 것이 아니라 뒤의 calceāmentōrum을 한정한다고 보아야 한다. 형용사가 어떤 격을 지배하는지 미리 알아 두면 이런 오배치를 피할 수 있다."},{"q_ko":"cuius와 eius가 같은 사람을 가리킨다. 왜 두 번 나오는가?","a_ko":"그리스어 원문의 οὗ ... αὐτοῦ 구조를 그대로 옮긴 셈어법이다. 히브리어와 아람어는 관계사 뒤에 대명사를 한 번 더 놓아 관계를 명확히 하는데, 그리스어를 거쳐 라틴어까지 그 중복이 남았다. 고전 라틴어라면 cuius 하나로 끝냈을 것이다. 라틴어 문법으로는 잉여이므로 번역할 때 하나만 살린다."},{"q_ko":"solvere는 어떤 부정사 용법인가?","a_ko":"dignus를 한정하는 설명적 부정사다. '무엇을 하기에 합당한가'를 밝힌다. 고전 라틴어라면 dignus quī solvat(관계절 + 가정법)를 쓰는 편이 더 흔하지만, 후기 라틴어와 성경 라틴어에서는 부정사로 대신하는 일이 늘어난다."},{"q_ko":"prōcumbēns는 언제의 동작인가?","a_ko":"주동사와 같은 시점이다. 현재능동분사는 절대적 현재가 아니라 주동사에 대한 동시성을 나타낸다. 여기서 주절이 현재(sum)이므로 '몸을 굽히면서'가 된다. 만약 주동사가 완료였다면 '몸을 굽히고 있던 때에'로 옮겨진다."},{"q_ko":"post mē는 시간인가 장소인가?","a_ko":"시간이다. '내 뒤에 오신다'는 공간적 위치가 아니라 '나보다 나중에 오신다'는 순서를 뜻한다. post는 두 가지를 모두 나타낼 수 있으므로 문맥이 결정한다."},{"q_ko":"praedicābat, dīcēns는 왜 겹쳐 쓰였는가?","a_ko":"'선포하며 말하기를'로 직역되는 셈어식 중복 표현이다. 히브리어에서 발화 동사 뒤에 '말하기를'을 덧붙여 직접화법을 여는 관습이 그리스어를 거쳐 들어왔다. 라틴어로는 잉여이므로 번역할 때 콜론 하나로 대체해도 된다."}]},{"sentence_id":"mk-1-8","items":[{"q_ko":"aquā의 마지막 a는 길다. 짧으면 무엇이 되는가?","a_ko":"aqua가 되어 주격이 된다. 1변화 명사는 주격 -a와 탈격 -ā가 마크론으로만 구별되므로, 마크론을 빼면 '물이'와 '물로'가 뒤섞인다. 여기서는 세례의 수단이므로 탈격 aquā여야 한다. SPEC 7장이 말한 rosa/rosā의 실제 사례다."},{"q_ko":"Ego와 ille가 둘 다 명시된 이유는?","a_ko":"대조하기 위해서다. 라틴어는 동사 어미가 인칭을 알려 주므로 주어 대명사가 필요 없지만, 두 주체를 맞세울 때는 일부러 써서 대립을 부각한다. '나는 ... 그러나 그는 ...'이라는 대구가 이 구절의 요지다."},{"q_ko":"vērō는 무엇을 하는 단어인가?","a_ko":"앞 절과의 대조를 표시하는 논증 연결어다. 문장 두 번째 자리에 놓이는 후치어이므로 문두로 옮겨 '그러나'로 번역한다. 뜻을 외우는 것보다 '이 단어가 나오면 앞과 반대되는 내용이 온다'는 기대를 훈련하는 것이 중요하다. SPEC 3.5의 4층 어휘가 바로 이런 부류다."},{"q_ko":"Spīritū는 몇 변화이며 -ū로 끝나는 다른 후보는 무엇인가?","a_ko":"4변화다. 4변화 남성 명사의 탈격 단수가 -ū이고, 소유격 복수 -uum, 여격·탈격 복수 -ibus로 이어진다. -ū 어미는 4변화 탈격 단수 외에 supine의 두 번째 형태(예: dictū)도 있으니 문맥으로 갈라야 한다. spīritus를 2변화로 오해해 소유격을 spīritī로 만들지 않도록 주의한다."},{"q_ko":"완료(baptizāvī)와 미래(baptizābit)의 대조가 말하는 바는?","a_ko":"요한의 세례는 이미 끝난 일이고 그분의 세례는 아직 오지 않았다는 것이다. 시제 자체가 두 세례의 관계를 규정한다. 어휘가 아니라 시제가 논지를 짊어지는 문장이므로, 시제를 흘려 읽으면 요점을 놓친다."},{"q_ko":"aquā에는 전치사가 없는데 5절의 ab illō에는 ab가 있다. 왜 다른가?","a_ko":"수단탈격은 사물이면 전치사 없이 쓰고, 행위자탈격은 사람이면 ā/ab를 반드시 붙이기 때문이다. 물은 도구이므로 맨 탈격, 요한은 행위자이므로 ab가 필요하다. 이 구별은 수동태를 만날 때마다 되풀이되므로 반사적으로 나와야 한다."},{"q_ko":"baptizābit의 -bit는 미래인가 미완료인가?","a_ko":"미래다. 1변화·2변화 동사의 미래는 -bō, -bis, -bit이고 미완료는 -bam, -bās, -bat이다. -ba-가 보이면 미완료, -bi-가 보이면 미래로 갈라진다. 7절의 praedicābat(미완료)와 나란히 놓고 보면 한 글자 차이가 시제를 가르는 것이 보인다."}]},{"sentence_id":"mk-1-9","items":[{"q_ko":"이 절의 vēnit와 7절의 Venit는 철자가 같다. 무엇이 다른가?","a_ko":"모음 길이가 다르고 그래서 시제가 다르다. 7절은 venit(직설법 현재, '온다'), 9절은 vēnit(직설법 완료, '왔다')이다. 4변화 동사 veniō의 완료 어간은 vēn-으로 현재 어간 ven-과 모음 길이만 다르다. 마크론이 없으면 두 절을 구별할 수 없고, 실제로 이 구별이 서사의 시간 구조 전체를 결정한다. 이 앱이 모든 본문에 마크론을 요구하는 이유가 이 한 쌍에 압축되어 있다."},{"q_ko":"factum est는 무엇의 번역이며 주어가 무엇인가?","a_ko":"히브리어 서사 관용구 wayhî(그리고 ~하는 일이 있었다)를 그리스어 ἐγένετο를 거쳐 옮긴 것이다. 주어가 될 명사가 없으므로 중성 단수를 써서 비인칭으로 처리한다. 뒤따르는 절 전체가 사실상 주어 노릇을 한다. 새 장면을 여는 신호로 읽으면 된다."},{"q_ko":"baptizātus est는 완료 수동인가, 현재 수동인가?","a_ko":"완료 수동이다. est가 현재형이라 헷갈리지만, 완료수동분사와 결합하면 전체가 완료 수동이 된다. '세례를 받고 있다'가 아니라 '세례를 받았다'이다. 현재 수동은 baptizātur 한 단어로 쓴다. 이 착각은 초심자가 가장 자주 하는 실수 중 하나다."},{"q_ko":"ā Iōhanne와 in Iordāne는 둘 다 탈격이다. 용법이 어떻게 다른가?","a_ko":"ā Iōhanne는 행위자탈격으로 세례를 준 사람을, in Iordāne는 장소탈격으로 그 일이 일어난 곳을 가리킨다. 형태가 같은 탈격이라도 전치사와 문맥이 용법을 나눈다. 탈격을 만나면 격이 아니라 '무슨 탈격인가'를 먼저 물어야 한다."},{"q_ko":"시간탈격은 보통 전치사 없이 쓰는데 여기는 왜 in이 붙었는가?","a_ko":"고전 라틴어라면 illīs diēbus만으로 충분하다. in을 붙인 것은 그리스어 ἐν ταῖς ἡμέραις를 그대로 옮긴 번역체다. 불가타에는 이렇게 고전 어법보다 전치사가 더 붙는 자리가 많으므로, 고전 문법으로 어색해 보이면 그리스어 원문을 의심하는 것이 요령이다."},{"q_ko":"Nazareth는 왜 격변화하지 않는가?","a_ko":"히브리어에서 온 무변화 고유명사이기 때문이다. 라틴어 변화표 어디에도 들어가지 않고 형태가 고정된다. 격은 전치사 ā가 알려 준다. 성경 라틴어의 히브리어 지명·인명 상당수가 이렇게 무변화이며, 반대로 Iēsūs나 Iōhannēs처럼 부분적으로 라틴어 변화를 받아들인 이름도 있어 단어별로 확인해야 한다."},{"q_ko":"Galilaeae는 소유격인가 여격인가? 어떻게 판단하는가?","a_ko":"소유격이다. 1변화의 -ae는 소유격 단수·여격 단수·주격 복수가 모두 같은 악명 높은 어미다. 여기서는 Nazareth를 한정해 '갈릴래아의 나사렛'을 이루므로 소유격이다. 여격으로 읽으면 걸릴 동사가 없고, 주격 복수로 읽으면 문장에 주어가 둘이 되어 성립하지 않는다. -ae를 만나면 이 세 후보를 놓고 소거하는 습관을 들이라."},{"q_ko":"diēbus는 5변화인데 남성인가 여성인가?","a_ko":"diēs는 보통 남성이지만 특정한 날짜를 가리킬 때는 여성으로 쓰기도 한다. 여기서는 illīs가 남성 복수 탈격이므로 남성이다. 5변화 명사는 대부분 여성인데 diēs가 예외라는 점이 자주 시험된다."}]},{"sentence_id":"mk-1-10","items":[{"q_ko":"dēscendentem과 manentem은 columbam을 수식하는가, Spīritum을 수식하는가?","a_ko":"Spīritum이다. 두 분사는 대격 단수 남성인데 columbam은 여성이므로 성이 맞지 않는다. spīritus가 남성 명사이므로 분사는 그쪽에 걸린다. 위치상으로는 columbam 바로 뒤에 있어 착각하기 쉽지만, 라틴어에서 짝을 정하는 것은 거리가 아니라 성·수·격 일치다. 이 문장은 그 원리를 시험하기에 가장 좋은 예다."},{"q_ko":"vīdit인가 videt인가? 무엇이 결정되는가?","a_ko":"vīdit, 즉 직설법 완료다. videō의 완료 어간은 vīd-로 장모음이고, 현재는 videt로 어간모음 자체가 다르다. 여기서는 그리스어 아오리스트에 대응하는 완료다. 서사의 주된 사건을 나르는 동사이므로 시제를 잘못 잡으면 장면 전체가 흐려진다."},{"q_ko":"caelōs apertōs는 '열린 하늘을 보았다'인가, '하늘이 열린 것을 보았다'인가?","a_ko":"후자로 읽는 것이 자연스럽다. vīdit 같은 지각동사는 목적어와 함께 서술 대격을 취해 '~이 ~한 상태임을 보다'를 나타낸다. 즉 apertōs는 caelōs를 꾸미는 것이 아니라 caelōs가 어떤 상태인지를 서술한다. 3절의 rēctās facite sēmitās와 같은 구조다."},{"q_ko":"apertōs는 무슨 형태인가?","a_ko":"aperiō의 완료수동분사(PPP) 대격 복수 남성이다. aperiō, aperīre, aperuī, apertus의 네 번째 주요형에서 왔다. 4주요형은 -us 형태로 외운다."},{"q_ko":"ascendēns의 주어는 누구인가? 문장 안에 명시되어 있는가?","a_ko":"예수다. 이 문장에는 명시된 주어가 없고 9절에서 이어받는다. 분사가 주격 단수 남성이므로 vīdit의 생략된 주어와 같은 대상임을 알 수 있다. 정동사의 어미와 분사의 격이 함께 생략된 주어를 지목하는 구조다."},{"q_ko":"dē aquā의 탈격 용법은?","a_ko":"분리탈격이다. ascendēns(올라오면서)의 출발점을 나타낸다. dē는 '~로부터 아래에서 위로'라는 방향성을 담고 있어 ex나 ab보다 이 장면에 잘 맞는다. 8절의 aquā(수단탈격)와 형태가 같지만 용법이 전혀 다르다는 점을 함께 확인하라."},{"q_ko":"tamquam columbam이 왜 대격인가?","a_ko":"비교되는 대상이 Spīritum과 같은 격을 취하기 때문이다. tamquam은 격을 지배하는 전치사가 아니라 비교를 표시하는 접속사이므로, 비교 대상의 격은 그것이 견주어지는 말을 따라간다. Spīritum이 대격이니 columbam도 대격이다."},{"q_ko":"in ipsō에서 ipse와 is의 차이는?","a_ko":"ipse는 강조대명사로 '바로 그 자신'을 가리키고, is는 색채 없는 지시대명사다. 여기서 ipsō를 쓴 것은 성령이 다른 누구도 아닌 그분 위에 머물렀음을 부각한다. 다만 후기 라틴어에서는 ipse가 강조를 잃고 단순 지시로 약해지는 경향이 있어 불가타에서는 판단이 늘 분명하지는 않다."},{"q_ko":"caelōs가 복수인 이유는?","a_ko":"히브리어 שָׁמַיִם이 형태상 복수라서 그리스어와 라틴어 번역이 복수를 그대로 옮겼기 때문이다. 라틴어 caelum은 본래 2변화 중성 단수로 쓰이나, 복수는 caelī로 남성이 되는 특이한 명사다. 성경 라틴어에서 '하늘들'이 복수로 나오면 셈어의 흔적으로 보면 된다."},{"q_ko":"statim은 마가복음에서 어떤 구실을 하는가?","a_ko":"장면을 빠르게 이어 붙이는 부사로, 마가복음에 유난히 자주 나온다(그리스어 εὐθύς). 뜻 자체는 단순하지만 이 책의 문체 표지이므로, 나올 때마다 '다음 장면으로 넘어간다'는 신호로 읽으면 흐름을 잡기 쉽다."}]}],"lemma_index":[{"lemma_id":"lem:initium","lemma":"initium, initiī, n. (복수 initia)","pos":"명사","gloss_ko":"시작"},{"lemma_id":"lem:evangelium","lemma":"evangelium, evangeliī, n. (복수 evangelia)","pos":"명사","gloss_ko":"복음"},{"lemma_id":"lem:Iesus","lemma":"Iēsūs, Iēsū, m.","pos":"고유명사","gloss_ko":"예수 (그리스어계 불규칙 변화)"},{"lemma_id":"lem:Christus","lemma":"Chrīstus, Chrīstī, m.","pos":"고유명사","gloss_ko":"그리스도, 기름부음받은 자"},{"lemma_id":"lem:filius","lemma":"fīlius, fīliī, m.","pos":"명사","gloss_ko":"아들"},{"lemma_id":"lem:deus","lemma":"deus, deī, m.","pos":"명사","gloss_ko":"신, 하나님"},{"lemma_id":"lem:sicut","lemma":"sīcut","pos":"접속사","gloss_ko":"~와 같이"},{"lemma_id":"lem:scribo","lemma":"scrībō, scrībere, scrīpsī, scrīptus","pos":"동사","gloss_ko":"쓰다, 기록하다 (3변화)"},{"lemma_id":"lem:sum","lemma":"sum, esse, fuī, futūrus","pos":"동사","gloss_ko":"이다, 있다 (불규칙, 4주요형은 FAP)"},{"lemma_id":"lem:in","lemma":"in","pos":"전치사","gloss_ko":"(+탈격) ~ 안에 / (+대격) ~ 안으로, ~을 향하여"},{"lemma_id":"lem:Isaias","lemma":"Isaiās, Isaiae, m.","pos":"고유명사","gloss_ko":"이사야 (1변화지만 남성)"},{"lemma_id":"lem:propheta","lemma":"prophēta, prophētae, m.","pos":"명사","gloss_ko":"예언자 (1변화지만 남성)"},{"lemma_id":"lem:ecce","lemma":"ecce","pos":"감탄사","gloss_ko":"보라"},{"lemma_id":"lem:ego","lemma":"ego, meī","pos":"대명사","gloss_ko":"나 (1인칭)"},{"lemma_id":"lem:mitto","lemma":"mittō, mittere, mīsī, missus","pos":"동사","gloss_ko":"보내다 (3변화)"},{"lemma_id":"lem:angelus","lemma":"angelus, angelī, m.","pos":"명사","gloss_ko":"사자, 천사"},{"lemma_id":"lem:meus","lemma":"meus, mea, meum","pos":"형용사","gloss_ko":"나의"},{"lemma_id":"lem:ante","lemma":"ante","pos":"전치사","gloss_ko":"(+대격) ~ 앞에, ~보다 먼저"},{"lemma_id":"lem:facies","lemma":"faciēs, faciēī, f.","pos":"명사","gloss_ko":"얼굴 (5변화)"},{"lemma_id":"lem:tuus","lemma":"tuus, tua, tuum","pos":"형용사","gloss_ko":"너의"},{"lemma_id":"lem:qui","lemma":"quī, quae, quod","pos":"관계대명사","gloss_ko":"~하는 (그것)"},{"lemma_id":"lem:praeparo","lemma":"praeparō, praeparāre, praeparāvī, praeparātus","pos":"동사","gloss_ko":"예비하다 (1변화)"},{"lemma_id":"lem:via","lemma":"via, viae, f.","pos":"명사","gloss_ko":"길"},{"lemma_id":"lem:tu","lemma":"tū, tuī","pos":"대명사","gloss_ko":"너 (2인칭)"},{"lemma_id":"lem:vox","lemma":"vōx, vōcis, f.","pos":"명사","gloss_ko":"소리, 목소리 (3변화)"},{"lemma_id":"lem:clamo","lemma":"clāmō, clāmāre, clāmāvī, clāmātus","pos":"동사","gloss_ko":"외치다 (1변화)"},{"lemma_id":"lem:desertum","lemma":"dēsertum, dēsertī, n. (복수 dēserta)","pos":"명사","gloss_ko":"광야 (dēserō의 완료수동분사에서 명사화)"},{"lemma_id":"lem:paro","lemma":"parō, parāre, parāvī, parātus","pos":"동사","gloss_ko":"준비하다 (1변화)"},{"lemma_id":"lem:dominus","lemma":"dominus, dominī, m.","pos":"명사","gloss_ko":"주인, 주"},{"lemma_id":"lem:rectus","lemma":"rēctus, rēcta, rēctum","pos":"형용사","gloss_ko":"곧은, 바른 (regō의 완료수동분사에서 형용사화)"},{"lemma_id":"lem:facio","lemma":"faciō, facere, fēcī, factus","pos":"동사","gloss_ko":"만들다, 하다 (3-io변화; 명령법 단수 fac 불규칙)"},{"lemma_id":"lem:semita","lemma":"sēmita, sēmitae, f.","pos":"명사","gloss_ko":"좁은 길, 지름길"},{"lemma_id":"lem:is","lemma":"is, ea, id","pos":"지시대명사","gloss_ko":"그, 그것"},{"lemma_id":"lem:Iohannes","lemma":"Iōhannēs, Iōhannis, m.","pos":"고유명사","gloss_ko":"요한 (그리스어계 3변화)"},{"lemma_id":"lem:baptizo","lemma":"baptizō, baptizāre, baptizāvī, baptizātus","pos":"동사","gloss_ko":"세례를 주다 (1변화, 그리스어 차용)"},{"lemma_id":"lem:et","lemma":"et","pos":"등위접속사","gloss_ko":"그리고, ~도"},{"lemma_id":"lem:praedico1","lemma":"praedicō, praedicāre, praedicāvī, praedicātus","pos":"동사","gloss_ko":"선포하다 (1변화). praedīcō, praedīcere '미리 말하다'(3변화)와 별개 표제어"},{"lemma_id":"lem:baptismus","lemma":"baptismus, baptismī, m.","pos":"명사","gloss_ko":"세례 (baptisma, -atis, n.와 병존)"},{"lemma_id":"lem:paenitentia","lemma":"paenitentia, paenitentiae, f.","pos":"명사","gloss_ko":"회개"},{"lemma_id":"lem:remissio","lemma":"remissiō, remissiōnis, f.","pos":"명사","gloss_ko":"사함, 놓아줌 (3변화)"},{"lemma_id":"lem:peccatum","lemma":"peccātum, peccātī, n. (복수 peccāta)","pos":"명사","gloss_ko":"죄"},{"lemma_id":"lem:egredior","lemma":"ēgredior, ēgredī, ēgressus sum","pos":"동사","gloss_ko":"나아가다, 나오다 (디포넌트, 3-io변화)"},{"lemma_id":"lem:ad","lemma":"ad","pos":"전치사","gloss_ko":"(+대격) ~에게로, ~을 향하여"},{"lemma_id":"lem:omnis","lemma":"omnis, omne","pos":"형용사","gloss_ko":"모든, 온 (3변화 형용사)"},{"lemma_id":"lem:Iudaea","lemma":"Iūdaea, Iūdaeae, f.","pos":"고유명사","gloss_ko":"유대"},{"lemma_id":"lem:regio","lemma":"regiō, regiōnis, f.","pos":"명사","gloss_ko":"지방, 지역 (3변화)"},{"lemma_id":"lem:Ierosolymita","lemma":"Ierosolymīta, Ierosolymītae, m.","pos":"명사","gloss_ko":"예루살렘 사람 (1변화지만 남성)"},{"lemma_id":"lem:universus","lemma":"ūniversus, ūniversa, ūniversum","pos":"형용사","gloss_ko":"전체의, 온"},{"lemma_id":"lem:a","lemma":"ā / ab","pos":"전치사","gloss_ko":"(+탈격) ~로부터, ~에 의하여 (자음 앞 ā, 모음 앞 ab)"},{"lemma_id":"lem:ille","lemma":"ille, illa, illud","pos":"지시대명사","gloss_ko":"저, 그"},{"lemma_id":"lem:Iordanes","lemma":"Iordānēs, Iordānis, m.","pos":"고유명사","gloss_ko":"요단 (그리스어계 3변화)"},{"lemma_id":"lem:flumen","lemma":"flūmen, flūminis, n. (복수 flūmina)","pos":"명사","gloss_ko":"강 (3변화)"},{"lemma_id":"lem:confiteor","lemma":"cōnfiteor, cōnfitērī, cōnfessus sum","pos":"동사","gloss_ko":"고백하다 (디포넌트, 2변화)"},{"lemma_id":"lem:suus","lemma":"suus, sua, suum","pos":"형용사","gloss_ko":"자기의 (재귀 소유형용사)"},{"lemma_id":"lem:vestio","lemma":"vestiō, vestīre, vestīvī, vestītus","pos":"동사","gloss_ko":"옷 입히다 (4변화)"},{"lemma_id":"lem:pilus","lemma":"pilus, pilī, m.","pos":"명사","gloss_ko":"털"},{"lemma_id":"lem:camelus","lemma":"camēlus, camēlī, m.","pos":"명사","gloss_ko":"낙타"},{"lemma_id":"lem:zona","lemma":"zōna, zōnae, f.","pos":"명사","gloss_ko":"띠, 허리띠"},{"lemma_id":"lem:pelliceus","lemma":"pellīceus, pellīcea, pellīceum","pos":"형용사","gloss_ko":"가죽으로 된"},{"lemma_id":"lem:circa","lemma":"circā","pos":"전치사","gloss_ko":"(+대격) ~ 둘레에"},{"lemma_id":"lem:lumbus","lemma":"lumbus, lumbī, m.","pos":"명사","gloss_ko":"허리"},{"lemma_id":"lem:locusta","lemma":"locusta, locustae, f.","pos":"명사","gloss_ko":"메뚜기"},{"lemma_id":"lem:mel","lemma":"mel, mellis, n. (복수 mella)","pos":"명사","gloss_ko":"꿀 (3변화)"},{"lemma_id":"lem:silvester","lemma":"silvester, silvestris, silvestre","pos":"형용사","gloss_ko":"숲의, 들의 (3변화 형용사)"},{"lemma_id":"lem:edo","lemma":"edō, edere (또는 ēsse), ēdī, ēsus","pos":"동사","gloss_ko":"먹다 (불규칙)"},{"lemma_id":"lem:dico","lemma":"dīcō, dīcere, dīxī, dictus","pos":"동사","gloss_ko":"말하다 (3변화; 명령법 단수 dīc 불규칙)"},{"lemma_id":"lem:venio","lemma":"veniō, venīre, vēnī, ventūrus","pos":"동사","gloss_ko":"오다 (4변화, 자동사이므로 4주요형은 FAP)"},{"lemma_id":"lem:fortis","lemma":"fortis, forte","pos":"형용사","gloss_ko":"강한, 용감한 (3변화 형용사; 비교급 fortior)"},{"lemma_id":"lem:post","lemma":"post","pos":"전치사","gloss_ko":"(+대격) ~ 뒤에, ~ 후에"},{"lemma_id":"lem:non","lemma":"nōn","pos":"부사","gloss_ko":"~ 아니다"},{"lemma_id":"lem:dignus","lemma":"dignus, digna, dignum","pos":"형용사","gloss_ko":"합당한 (+탈격을 지배)"},{"lemma_id":"lem:procumbo","lemma":"prōcumbō, prōcumbere, prōcubuī, prōcubitūrus","pos":"동사","gloss_ko":"몸을 굽히다, 엎드리다 (3변화, 자동사이므로 4주요형은 FAP)"},{"lemma_id":"lem:solvo","lemma":"solvō, solvere, solvī, solūtus","pos":"동사","gloss_ko":"풀다 (3변화)"},{"lemma_id":"lem:corrigia","lemma":"corrigia, corrigiae, f.","pos":"명사","gloss_ko":"끈, 가죽끈"},{"lemma_id":"lem:calceamentum","lemma":"calceāmentum, calceāmentī, n. (복수 calceāmenta)","pos":"명사","gloss_ko":"신발"},{"lemma_id":"lem:aqua","lemma":"aqua, aquae, f.","pos":"명사","gloss_ko":"물"},{"lemma_id":"lem:vero","lemma":"vērō","pos":"부사","gloss_ko":"그러나, 참으로 (후치 접속 부사)"},{"lemma_id":"lem:spiritus","lemma":"spīritus, spīritūs, m.","pos":"명사","gloss_ko":"영, 숨 (4변화)"},{"lemma_id":"lem:sanctus","lemma":"sānctus, sāncta, sānctum","pos":"형용사","gloss_ko":"거룩한"},{"lemma_id":"lem:dies","lemma":"diēs, diēī, m.","pos":"명사","gloss_ko":"날 (5변화; 5변화 중 예외적으로 남성)"},{"lemma_id":"lem:Nazareth","lemma":"Nazareth","pos":"고유명사","gloss_ko":"나사렛 (무변화)"},{"lemma_id":"lem:Galilaea","lemma":"Galilaea, Galilaeae, f.","pos":"고유명사","gloss_ko":"갈릴래아"},{"lemma_id":"lem:statim","lemma":"statim","pos":"부사","gloss_ko":"즉시, 곧"},{"lemma_id":"lem:ascendo","lemma":"ascendō, ascendere, ascendī, ascēnsus","pos":"동사","gloss_ko":"올라가다 (3변화)"},{"lemma_id":"lem:de","lemma":"dē","pos":"전치사","gloss_ko":"(+탈격) ~로부터 (아래에서 위로), ~에 관하여"},{"lemma_id":"lem:video","lemma":"videō, vidēre, vīdī, vīsus","pos":"동사","gloss_ko":"보다 (2변화)"},{"lemma_id":"lem:caelum","lemma":"caelum, caelī, n. (복수 caelī, 남성)","pos":"명사","gloss_ko":"하늘 (복수에서 성이 남성으로 바뀜)"},{"lemma_id":"lem:aperio","lemma":"aperiō, aperīre, aperuī, apertus","pos":"동사","gloss_ko":"열다 (4변화)"},{"lemma_id":"lem:tamquam","lemma":"tamquam","pos":"접속사","gloss_ko":"마치 ~처럼"},{"lemma_id":"lem:columba","lemma":"columba, columbae, f.","pos":"명사","gloss_ko":"비둘기"},{"lemma_id":"lem:descendo","lemma":"dēscendō, dēscendere, dēscendī, dēscēnsus","pos":"동사","gloss_ko":"내려오다 (3변화)"},{"lemma_id":"lem:maneo","lemma":"maneō, manēre, mānsī, mānsūrus","pos":"동사","gloss_ko":"머무르다 (2변화, 자동사이므로 4주요형은 FAP)"},{"lemma_id":"lem:ipse","lemma":"ipse, ipsa, ipsum","pos":"강조대명사","gloss_ko":"바로 그 자신"}],"glossary_candidates":[{"term":"서술 대격","en":"predicate accusative (object complement)","note":"영어 명칭은 Allen & Greenough에서 그대로 검색된다. 흔히 쓰이는 다른 한국어 라벨은 glossary의 never 목록에 걸리므로 이 표기를 쓴다.","used_in":["mk-1-3","mk-1-10"]},{"term":"표제 주격","en":"nominative of title / heading","note":"정동사 없이 제목 구실을 하는 주격. 1절과 3절의 명사문에 사용.","used_in":["mk-1-1","mk-1-3"]},{"term":"동격적 소유격","en":"genitive of apposition","note":"'요단이라는 강'처럼 소유가 아니라 동일성을 나타내는 소유격.","used_in":["mk-1-5"]},{"term":"설명적 부정사","en":"explanatory (epexegetical) infinitive","note":"형용사를 한정해 '무엇을 하기에'를 밝히는 부정사.","used_in":["mk-1-7"]},{"term":"우언적 표현","en":"periphrastic construction","note":"sum + 분사로 하나의 정동사를 대신하는 구조. 불가타의 그리스어 직역에서 잦다.","used_in":["mk-1-4","mk-1-6"]},{"term":"논증 연결어","en":"argumentative particle","note":"SPEC 3.5의 4층 어휘. vērō가 첫 사례.","used_in":["mk-1-8"]},{"term":"아오리스트","en":"aorist (Greek)","note":"그리스어 시제. 흔히 쓰이는 한국어 라벨은 glossary의 never 목록에 걸리므로 음차를 쓴다. SPEC 6장의 그리스어 필드 확장에 대비한 용어.","used_in":["mk-1-7","mk-1-9","mk-1-10"]},{"term":"셈어법","en":"Semitism","note":"히브리어·아람어 관용구가 그리스어를 거쳐 라틴어에 직역된 자리. 불가타 독해의 상시 변수.","used_in":["mk-1-2","mk-1-7","mk-1-9","mk-1-10"]},{"term":"무변화 고유명사","en":"indeclinable proper noun","note":"Nazareth처럼 격변화하지 않는 히브리어계 이름. 마크론을 붙일 근거가 없어 IPA 계산 함수에서 예외 처리가 필요하다.","used_in":["mk-1-9"]}],"lemma_index_note":"표제어 스텁. SPEC 3.1(Noun) / 3.2(Verb) 전체 스키마로 확장 예정. 4주요형은 전부 -us 형태로 표기하고 자동사는 FAP를 씀."};</script>
+<script>
+/* 라틴어 다독 — 앱 껍데기
+ * 빌드 도구 없음. 이 파일이 곧 배포되는 파일이다.
+ * 데이터는 data/*.json에서 실행 시점에 읽는다 (SPEC 2장 모듈 단위 전략).
+ */
+'use strict';
+
+var MODULE_URL = './data/vulgate-mark-1.1-10.json';
+var MACRONS = 'āēīōūĀĒĪŌŪ';
+var PUNCT = ',.:;!?’‘“”"\'';
+var KIND_KO = {
+  vowel_length: '마크론', parsing: '파싱', orthography: '철자',
+  lemma: '표제어', text: '본문 이문'
+};
+
+/* ── 저장 도우미: 사파리 사생활 보호 모드에서 던질 수 있어 전부 감싼다 ── */
+function put(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+function el(tag, cls, text) {
+  var n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+/* ─────────────────────────── 서비스 워커 ─────────────────────────── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function (e) {
+      console.warn('서비스 워커 등록 실패:', e);
+    });
+  });
+}
+
+/* ─────────────────────────── 온라인 표시 ─────────────────────────── */
+function paintNet() {
+  var n = document.getElementById('net');
+  if (navigator.onLine) { n.className = 'net on'; n.textContent = 'ONLINE'; }
+  else { n.className = 'net off'; n.textContent = 'OFFLINE'; }
+}
+window.addEventListener('online', paintNet);
+window.addEventListener('offline', paintNet);
+paintNet();
+
+/* ─────────────────────────── 탭 전환 ─────────────────────────── */
+document.querySelectorAll('.tab').forEach(function (t) {
+  t.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (o) {
+      var on = o === t;
+      o.classList.toggle('on', on);
+      o.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.getElementById('view-read').hidden = t.dataset.view !== 'read';
+    document.getElementById('view-state').hidden = t.dataset.view !== 'state';
+    if (t.dataset.view === 'state') runChecks();
+    window.scrollTo(0, 0);
+  });
+});
+
+/* ─────────────────────────── 모듈 렌더 ─────────────────────────── */
+var DICT = {}, UNC = {}, curBtn = null;
+
+function markLong(word) {
+  var out = '';
+  for (var i = 0; i < word.length; i++) {
+    var ch = word[i];
+    out += MACRONS.indexOf(ch) >= 0
+      ? '<b class="lv">' + ch + '</b>'
+      : ch.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  }
+  return out;
+}
+
+function renderLatin(sent, toks) {
+  var flagged = {};
+  (sent.uncertain || []).forEach(function (u) {
+    if (u.token_index != null) flagged[u.token_index] = 1;
+  });
+  var p = el('p', 'lat'), ti = 0, html = '';
+  sent.latin.split(' ').forEach(function (chunk) {
+    var lead = '', trail = '';
+    while (chunk && PUNCT.indexOf(chunk[0]) >= 0) { lead += chunk[0]; chunk = chunk.slice(1); }
+    while (chunk && PUNCT.indexOf(chunk[chunk.length - 1]) >= 0) {
+      trail = chunk[chunk.length - 1] + trail; chunk = chunk.slice(0, -1);
+    }
+    if (lead) html += '<span class="pn">' + lead + '</span>';
+    if (chunk) {
+      html += '<button type="button" class="w' + (flagged[ti] ? ' flagged' : '') +
+              '" data-s="' + sent.id + '" data-i="' + ti + '">' + markLong(chunk) + '</button>';
+      ti++;
+    }
+    if (trail) html += '<span class="pn">' + trail + '</span>';
+    html += ' ';
+  });
+  p.innerHTML = html;
+  return p;
+}
+
+function fold(label, count) {
+  var d = el('details'), s = el('summary');
+  s.appendChild(el('span', 'k', label));
+  if (count != null) s.appendChild(el('span', 'k', String(count)));
+  d.appendChild(s);
+  var b = el('div', 'body');
+  d.appendChild(b);
+  return { root: d, body: b };
+}
+
+function render(M) {
+  // 표제어 색인
+  var LEM = {};
+  (M.lemma_index || []).forEach(function (l) { LEM[l.lemma_id] = l; });
+
+  // 문장별 토큰
+  var TOK = {};
+  M.tokens.forEach(function (t) { (TOK[t.sentence_id] = TOK[t.sentence_id] || []).push(t); });
+  Object.keys(TOK).forEach(function (k) { TOK[k].sort(function (a, b) { return a.index - b.index; }); });
+
+  // 탭 사전 데이터
+  Object.keys(TOK).forEach(function (sid) {
+    DICT[sid] = TOK[sid].map(function (t) {
+      var l = LEM[t.lemma_id] || {};
+      return { s: t.surface, m: t.morph, r: t.syntax_role, l: l.lemma || '', g: l.gloss_ko || '' };
+    });
+  });
+  M.sentences.forEach(function (s) {
+    UNC[s.id] = (s.uncertain || []).map(function (u) {
+      return { i: u.token_index, k: KIND_KO[u.kind] || u.kind };
+    });
+  });
+
+  var QB = {}, CIT = {};
+  (M.question_banks || []).forEach(function (q) { QB[q.sentence_id] = q.items; });
+  (M.scripture_citations || []).forEach(function (c) { (CIT[c.sentence_id] = CIT[c.sentence_id] || []).push(c); });
+
+  // 머리
+  var ver = (M.bible_versions || []).filter(function (v) { return v.id === (M.sentences[0] || {}).source_version; })[0];
+  var head = el('div', 'modhead');
+  head.appendChild(el('p', 'eyebrow', 'Evangelium secundum Marcum · 1,1–10'));
+  head.appendChild(el('h1', 'h1', M.scope || '불가타 마가복음'));
+  var meta = el('div', 'meta');
+  [ver ? ver.title.split('(')[0].trim() + ' ' + ver.year : M.base_text.edition,
+    '토큰 ' + M.tokens.length,
+    '질문 ' + Object.keys(QB).reduce(function (a, k) { return a + QB[k].length; }, 0)
+  ].forEach(function (x) { meta.appendChild(el('span', 'tag', x)); });
+  var unver = M.sentences.filter(function (s) { return s.verified === false; }).length;
+  if (unver) meta.appendChild(el('span', 'tag warn', '미검증 ' + unver + '절'));
+  head.appendChild(meta);
+  head.appendChild(el('p', 'note',
+    '번역은 접혀 있습니다. 라틴어로 먼저 끝까지 읽고, 막힌 뒤에 펼치십시오. ' +
+    '점선 밑줄이 그어진 단어는 마크론이나 파싱이 아직 확정되지 않은 것입니다.'));
+  document.getElementById('modmeta').appendChild(head);
+
+  // 절
+  var box = document.getElementById('verses');
+  box.innerHTML = '';
+  M.sentences.forEach(function (s) {
+    var sec = el('section', 'verse');
+    sec.id = s.id;
+    sec.appendChild(el('p', 'vnum', s.id.replace('mk-1-', '1,')));
+    sec.appendChild(renderLatin(s, TOK[s.id]));
+
+    var rows = el('div', 'rows');
+
+    var tr = fold('번역');
+    var d1 = el('p', 'tr'); d1.appendChild(el('span', 'lbl', '직역'));
+    d1.appendChild(document.createTextNode(s.translation_ko));
+    tr.body.appendChild(d1);
+    if (s.translation_free_ko) {
+      var d2 = el('p', 'tr'); d2.appendChild(el('span', 'lbl', '의역'));
+      d2.appendChild(document.createTextNode(s.translation_free_ko));
+      tr.body.appendChild(d2);
+    }
+    rows.appendChild(tr.root);
+
+    var items = QB[s.id] || [];
+    if (items.length) {
+      var qf = fold('질문', items.length);
+      items.forEach(function (it, n) {
+        var q = el('div', 'q'), b = el('button');
+        b.type = 'button';
+        b.setAttribute('aria-expanded', 'false');
+        b.appendChild(el('span', 'n', String(n + 1).padStart(2, '0')));
+        b.appendChild(el('span', null, it.q_ko));
+        b.addEventListener('click', function () {
+          var open = q.classList.toggle('open');
+          b.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        q.appendChild(b);
+        q.appendChild(el('div', 'a', it.a_ko));
+        qf.body.appendChild(q);
+      });
+      rows.appendChild(qf.root);
+    }
+
+    (CIT[s.id] || []).forEach(function (c) {
+      var cf = fold('구약 인용', c.ref);
+      cf.body.className = 'body cit app';
+      cf.body.appendChild(el('p', 'ref', c.ref + ' · 저자가 따른 본문: ' + c.source_version +
+        (c.verbatim ? ' · 자구 일치' : ' · 자구 불일치')));
+      cf.body.appendChild(el('p', null, c.divergence_ko));
+      if (c.vulgate_parallel) cf.body.appendChild(el('p', 'par', c.vulgate_parallel));
+      rows.appendChild(cf.root);
+    });
+
+    var unc = s.uncertain || [];
+    if (unc.length) {
+      var uf = fold('이문·미확정', unc.length);
+      uf.body.className = 'body app';
+      unc.forEach(function (u) {
+        var it = el('div', 'item'), hd = el('div', 'hd');
+        hd.appendChild(el('span', 'kind', KIND_KO[u.kind] || u.kind));
+        hd.appendChild(el('span', 'sfx', u.surface));
+        hd.appendChild(el('span', 'conf', u.confidence));
+        it.appendChild(hd);
+        it.appendChild(el('p', null, u.issue));
+        var ul = el('ul', 'opts');
+        u.options.forEach(function (o) {
+          ul.appendChild(el('li', o === u.chosen ? 'pick' : null, o));
+        });
+        it.appendChild(ul);
+        uf.body.appendChild(it);
+      });
+      rows.appendChild(uf.root);
+    }
+
+    sec.appendChild(rows);
+    box.appendChild(sec);
+  });
+
+  // 바닥글
+  var f = document.getElementById('foot');
+  f.innerHTML = '';
+  f.appendChild(el('p', null,
+    '저본 ' + (M.sentences[0] || {}).source_version + ' · 스키마 ' + M.spec_ref +
+    ' · 모든 문장이 verified:false입니다. 2차 검증 전이므로 학습용으로만 쓰십시오.'));
+
+  wireWords();
+  restore();
+}
+
+/* ─────────────────────────── 탭 사전 ─────────────────────────── */
+function closeSheet() {
+  document.getElementById('sheet').classList.remove('up');
+  if (curBtn) { curBtn.classList.remove('on'); curBtn = null; }
+}
+
+function wireWords() {
+  document.querySelectorAll('.w').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (curBtn === b) { closeSheet(); return; }
+      var sid = b.dataset.s, i = +b.dataset.i, d = DICT[sid][i];
+      if (curBtn) curBtn.classList.remove('on');
+      curBtn = b; b.classList.add('on');
+      document.getElementById('sf').textContent = d.s;
+      document.getElementById('lemma').textContent = d.l ? '← ' + d.l : '';
+      document.getElementById('dMorph').textContent = d.m;
+      document.getElementById('dRole').textContent = d.r;
+      document.getElementById('dGloss').textContent = d.g || '—';
+      var w = document.getElementById('warn');
+      var fl = (UNC[sid] || []).filter(function (u) { return u.i === i; });
+      if (fl.length) {
+        w.hidden = false;
+        w.textContent = '⚠ ' + fl.map(function (u) { return u.k; }).join(' · ') + ' — 검증 전입니다.';
+      } else { w.hidden = true; }
+      document.getElementById('sheet').classList.add('up');
+      put('last', sid);
+      document.getElementById('resume').textContent = '이어 읽기 · ' + sid.replace('mk-1-', '절 ');
+    });
+  });
+}
+document.getElementById('x').addEventListener('click', closeSheet);
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+
+/* ── 장음 강조 ── */
+var lvBox = document.getElementById('lv');
+function applyLv() {
+  document.body.classList.toggle('lv-on', lvBox.checked);
+  put('lv', lvBox.checked ? '1' : '0');
+}
+if (get('lv') === '1') lvBox.checked = true;
+lvBox.addEventListener('change', applyLv);
+applyLv();
+
+/* ── 무손실 재개 (SPEC P0 #3) ── */
+function restore() {
+  var last = get('last');
+  if (!last) return;
+  document.getElementById('resume').textContent = '이어 읽기 · ' + last.replace('mk-1-', '절 ');
+  var n = document.getElementById(last);
+  if (n) n.scrollIntoView({ block: 'start' });
+}
+
+/* ─────────────────────────── 상태 화면 ─────────────────────────── */
+function check(ok, title, detail) {
+  var li = el('li', ok === true ? 'ok' : ok === false ? 'bad' : '');
+  li.appendChild(el('span', 'dot'));
+  var t = el('div');
+  t.appendChild(el('div', 't', title));
+  t.appendChild(el('div', 'd', detail));
+  li.appendChild(t);
+  return li;
+}
+
+function mb(n) { return (n / 1048576).toFixed(1) + ' MB'; }
+
+function runChecks() {
+  var box = document.getElementById('checks');
+  box.innerHTML = '';
+  var files = document.getElementById('files');
+  files.innerHTML = '';
+
+  // 1. 서비스 워커
+  if (!('serviceWorker' in navigator)) {
+    box.appendChild(check(false, '서비스 워커 없음',
+      '이 브라우저는 서비스 워커를 지원하지 않습니다. 오프라인 동작이 불가능합니다.'));
+  } else if (navigator.serviceWorker.controller) {
+    box.appendChild(check(true, '서비스 워커 작동 중',
+      '이 페이지는 서비스 워커가 넘겨준 것입니다. 오프라인 응답이 가능합니다.'));
+  } else {
+    box.appendChild(check(null, '서비스 워커 등록 대기',
+      '등록은 되었으나 아직 이 페이지를 넘겨받지 않았습니다. 한 번 새로고침하십시오.'));
+  }
+
+  // 2. 캐시
+  if (!('caches' in window)) {
+    box.appendChild(check(false, '캐시 저장소 없음', 'Cache API를 쓸 수 없습니다.'));
+  } else {
+    caches.keys().then(function (keys) {
+      if (!keys.length) {
+        box.appendChild(check(false, '캐시 비어 있음', '아직 아무것도 저장되지 않았습니다.'));
+        return;
+      }
+      return caches.open(keys[0]).then(function (c) { return c.keys(); }).then(function (reqs) {
+        box.appendChild(check(reqs.length > 0, '캐시 ' + reqs.length + '개 파일',
+          '캐시 이름 ' + keys.join(', ') + '. 아래 목록이 비행기 모드에서 열리는 파일입니다.'));
+        reqs.forEach(function (r) {
+          files.appendChild(el('li', null, r.url.replace(location.origin, '')));
+        });
+      });
+    }).catch(function () {
+      box.appendChild(check(false, '캐시 확인 실패', '저장소에 접근할 수 없습니다.'));
+    });
+  }
+
+  // 3. 영구 저장 (SPEC 2장: iOS 캐시 축출 방지)
+  if (!navigator.storage || !navigator.storage.persisted) {
+    box.appendChild(check(null, '영구 저장 확인 불가',
+      '이 브라우저는 persist API를 지원하지 않습니다. 캐시가 밀려날 수 있습니다.'));
+  } else {
+    navigator.storage.persisted().then(function (p) {
+      box.appendChild(check(p, p ? '영구 저장 허용됨' : '영구 저장 미허용',
+        p ? '저장 공간이 부족해도 이 앱의 캐시는 밀려나지 않습니다.'
+          : '아래 버튼으로 요청하십시오. 허용되지 않으면 저장 공간이 부족할 때 캐시가 지워집니다.'));
+    });
+  }
+
+  // 4. 사용량
+  if (navigator.storage && navigator.storage.estimate) {
+    navigator.storage.estimate().then(function (e) {
+      box.appendChild(check(null, '사용량 ' + mb(e.usage || 0),
+        '할당 가능 ' + mb(e.quota || 0) + '. SPEC 예상은 모듈당 10~40MB, 전체 300MB 내외입니다.'));
+    });
+  }
+}
+
+document.getElementById('persist').addEventListener('click', function () {
+  if (!navigator.storage || !navigator.storage.persist) {
+    alert('이 브라우저는 영구 저장 요청을 지원하지 않습니다.');
+    return;
+  }
+  navigator.storage.persist().then(function (ok) {
+    alert(ok ? '영구 저장이 허용되었습니다.'
+             : '거부되었습니다. 앱을 홈 화면에 추가한 뒤 다시 시도하면 허용될 가능성이 높습니다.');
+    runChecks();
+  });
+});
+
+document.getElementById('recheck').addEventListener('click', runChecks);
+
+document.getElementById('nuke').addEventListener('click', function () {
+  if (!confirm('서비스 워커를 해제하고 캐시를 모두 지웁니다. 계속할까요?')) return;
+  var jobs = [];
+  if ('caches' in window) {
+    jobs.push(caches.keys().then(function (ks) {
+      return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+    }));
+  }
+  if ('serviceWorker' in navigator) {
+    jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+      return Promise.all(rs.map(function (r) { return r.unregister(); }));
+    }));
+  }
+  Promise.all(jobs).then(function () { location.reload(); });
+});
+
+/* ─────────────────────────── 부팅 ─────────────────────────── */
+if (window.__MODULE) {
+  // 단일 파일 빌드: 모듈이 이 파일 안에 들어 있다
+  render(window.__MODULE);
+} else {
+  fetch(MODULE_URL)
+  .then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(render)
+  .catch(function (e) {
+    document.getElementById('verses').innerHTML =
+      '<p class="loading">모듈을 열지 못했습니다 — ' + e.message +
+      '<br>정적 서버로 열었는지 확인하십시오. 파일을 직접 여는 file:// 방식으로는 동작하지 않습니다.</p>';
+  });
+}
+
+</script>
+</body>
+</html>
