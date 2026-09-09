@@ -8,7 +8,7 @@
  */
 'use strict';
 
-var CACHE = 'latin-v2';   // 1:11–20 추가 + 장음 볼드 수정
+var CACHE = 'latin-v6';   // 마가복음 1장 전체 (1~45절)
 var SHELL = ['./', './index.html'];
 
 self.addEventListener('install', function (e) {
