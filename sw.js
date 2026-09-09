@@ -8,7 +8,7 @@
  */
 'use strict';
 
-var CACHE = 'latin-v6';   // 마가복음 1장 전체 (1~45절)
+var CACHE = 'latin-v10';  // 묻는 줄 명조체
 var SHELL = ['./', './index.html'];
 
 self.addEventListener('install', function (e) {

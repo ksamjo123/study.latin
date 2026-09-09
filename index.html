@@ -30,6 +30,10 @@
   --serif:'Hoefler Text',Palatino,'Palatino Linotype','Book Antiqua',Georgia,'Times New Roman',serif;
   --sans:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,-apple-system,sans-serif;
   --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;
+  /* 한국어 명조. 묻는 줄에만 쓴다 — 자료를 읽는 목소리와 묻는 목소리를 가른다.
+     아이폰에는 나눔명조가 들어 있다. 없으면 순서대로 물러난다. */
+  --myeongjo:'Nanum Myeongjo',AppleMyungjo,'Noto Serif KR','Noto Serif CJK KR',
+             'Source Han Serif K',ui-serif,Georgia,serif;
   --bar:3.1rem;
   --tabs:calc(3.4rem + env(safe-area-inset-bottom,0px));
 }
@@ -58,6 +62,9 @@
 
 *{box-sizing:border-box}
 html{color-scheme:light dark}
+/* hidden 속성은 브라우저 기본값이 display:none인데, 클래스에 display를 주면
+   그쪽이 이긴다. 감춰야 할 것이 그대로 보이는 사고가 나므로 여기서 못을 박는다. */
+[hidden]{display:none!important}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:var(--sans); font-size:15px; line-height:1.7;
@@ -259,6 +266,154 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 .foot{padding:1.8rem 0 1rem;color:var(--faint);font-size:.75rem;line-height:1.7}
 .foot code{font-family:var(--mono);font-size:.71rem}
 
+/* ═══════════════ 암기 (SRS) ═══════════════ */
+/* 읽기 화면과 같은 언어를 쓴다 — 각진 모서리(2~3px), 얇은 선, 라틴어는 세리프.
+   한국어에는 letter-spacing을 주지 않는다. 자간이 벌어져 흐트러져 보인다. */
+
+.srshead{
+  display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;
+  padding:1.5rem 0 .9rem;border-bottom:1px solid var(--rule-strong);
+}
+.srshead .h2{margin:0}
+.srsmeta{font-size:.79rem;color:var(--muted)}
+.srsmeta b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+.tab .badge{
+  display:inline-block;min-width:1.15rem;margin-left:.32rem;padding:0 .26rem;
+  background:var(--accent);color:var(--surface);border-radius:2px;
+  font-family:var(--mono);font-size:.63rem;line-height:1.15rem;font-weight:600;
+  font-variant-numeric:tabular-nums;vertical-align:.08rem;
+}
+
+/* ---------- 카드 ---------- */
+.card{
+  margin:1.2rem 0;padding:1.15rem 1.1rem 1.05rem;
+  background:var(--surface);border:1px solid var(--rule-strong);border-radius:3px;
+}
+.ckind{font-size:.73rem;color:var(--faint);margin-bottom:1.1rem}
+.ckind .new{color:var(--accent);font-weight:600}
+
+/* 앞면 — 뜻 카드는 가운데, 파싱 카드는 왼쪽. 한 카드 안에서 정렬을 섞지 않는다 */
+.cfront{padding:.2rem 0 .3rem}
+.cfront.g{text-align:center;padding:1.4rem 0 1.2rem}
+.cfront .big{
+  font-family:var(--serif);font-size:1.9rem;line-height:1.35;margin:0;
+  word-break:keep-all;letter-spacing:.005em;
+}
+.cfront .cvref{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
+  color:var(--accent);margin:0 0 .6rem;font-weight:600;
+}
+.cfront .cverse{
+  font-family:var(--serif);font-size:1.16rem;line-height:1.9;
+  margin:0;word-break:keep-all;
+}
+/* 묻는 줄은 카드 종류와 상관없이 가운데. 본문은 읽는 글이라 왼쪽 그대로 둔다.
+   글꼴도 명조로 바꾼다 — 늘어놓는 자료가 아니라 묻는 말이라는 것이 한눈에 보이게. */
+.cfront .ask{
+  margin:1.35rem 0 0;text-align:center;
+  font-family:var(--myeongjo);font-size:1.02rem;line-height:1.5;
+  color:var(--ink);letter-spacing:.01em;
+}
+.cfront.g .ask{margin-top:1.1rem}
+.cfront .hint{
+  margin:.35rem 0 0;text-align:center;
+  color:var(--faint);font-size:.74rem;line-height:1.5;
+}
+.cfront .hint span{white-space:nowrap}
+
+/* 본문 안에서 물어보는 낱말 — 읽기 화면에서 낱말을 눌렀을 때와 같은 표시 */
+.cw{white-space:nowrap}
+.cw.hit{
+  background:var(--accent-soft);color:var(--accent);
+  border-bottom:1px solid var(--accent);border-radius:2px;
+  padding:.05em .12em;margin:0 -.02em;
+}
+
+/* ---------- 뒷면 ---------- */
+.cback{margin-top:1.15rem;padding-top:1rem;border-top:1px solid var(--rule)}
+.cback .ans{
+  font-family:var(--sans);font-size:1.12rem;line-height:1.55;font-weight:600;
+  margin:0 0 .75rem;word-break:keep-all;
+}
+.cback .ans .tail{font-size:.82rem;font-weight:400;color:var(--muted);white-space:nowrap}
+
+.crow{
+  display:grid;grid-template-columns:3.4rem 1fr;gap:.6rem;align-items:start;
+  padding:.2rem 0;font-size:.86rem;
+}
+/* 줄 간격을 rem으로 못 박는다. 세리프 값이 섞여도 줄 사이가 들쭉날쭉해지지 않는다. */
+.clbl{color:var(--faint);font-size:.74rem;line-height:1.5rem}
+.cval{color:var(--muted);word-break:keep-all;line-height:1.5rem}
+/* 이름을 .lat으로 두면 읽기 화면의 본문 단락 규칙과 부딪친다 (margin이 딸려 온다) */
+.cval.cser{font-family:var(--serif);font-size:.96rem;color:var(--ink)}
+
+/* 용례 — 상자로 감싸지 않고 세로선 하나로 붙인다 */
+.cex{margin:.95rem 0 0;padding-left:.8rem;border-left:2px solid var(--accent-soft)}
+.cex .cvref{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+  color:var(--faint);margin:0 0 .2rem;
+}
+.cex .cverse{
+  font-family:var(--serif);font-size:1rem;line-height:1.85;margin:0;word-break:keep-all;
+}
+
+.cbtns{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:1rem}
+.cbtns a,.cbtns button{
+  font:inherit;font-size:.76rem;padding:.32rem .58rem;cursor:pointer;
+  background:none;border:1px solid var(--rule-strong);border-radius:2px;
+  color:var(--muted);text-decoration:none;
+}
+.cbtns a:active,.cbtns button:active{background:var(--sunk)}
+.cbtns a:focus-visible,.cbtns button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+/* ---------- 판단 ---------- */
+.cact{margin-top:1.25rem}
+.btn.wide{width:100%}
+.cgrades{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.42rem;margin-top:1.25rem}
+.cgrades .btn{
+  padding:.72rem .25rem;font-weight:600;font-size:.86rem;
+  border-radius:2px;border:1px solid var(--rule-strong);
+}
+.cgrades .g0{background:var(--bad-soft);color:var(--bad)}
+.cgrades .g1{background:var(--flag-soft);color:var(--flag)}
+.cgrades .g2{background:var(--ok-soft);color:var(--ok)}
+
+/* ---------- 다 끝냈을 때 ---------- */
+.done{
+  margin:1.4rem 0;padding:2.2rem 1.2rem;text-align:center;
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+}
+.done h3{margin:0 0 .6rem;font-family:var(--serif);font-size:1.15rem;font-weight:600}
+.done p{margin:.28rem 0;color:var(--muted);font-size:.84rem}
+
+/* ---------- 설정과 진도 ---------- */
+.srsset{margin:1.5rem 0 2rem;background:none;border:0;border-top:1px solid var(--rule)}
+.srsset summary{padding:.75rem 0;font-size:.82rem;color:var(--muted)}
+.srsset summary::after{color:var(--faint)}
+.srsset .body{padding:.2rem 0 .5rem}
+.srsset .row{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.5rem 0;font-size:.86rem;color:var(--muted);
+}
+.srsset select{
+  font:inherit;font-size:.84rem;padding:.28rem .45rem;background:var(--surface);
+  color:var(--ink);border:1px solid var(--rule-strong);border-radius:2px;
+}
+.srsset .sw{margin:.3rem .4rem .3rem 0}
+.srsstat{
+  margin:1rem 0 .2rem;padding:.75rem .85rem;background:var(--surface);
+  border:1px solid var(--rule);border-radius:3px;
+  font-size:.79rem;line-height:1.85;color:var(--muted);
+}
+.srsstat b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
+.srsset .actions{margin-top:.9rem}
+#srsBox{
+  width:100%;margin-top:.7rem;font:12px/1.5 var(--mono);
+  padding:.6rem;background:var(--surface);color:var(--ink);
+  border:1px solid var(--rule-strong);border-radius:2px;resize:vertical;
+}
+
 </style>
 </head>
 <body>
@@ -287,6 +442,62 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
       </div>
 
       <footer class="foot" id="foot"></footer>
+    </div>
+  </section>
+
+  <!-- ─────────── 암기 (SRS) ─────────── -->
+  <section id="view-srs" class="view" hidden>
+    <div class="wrap">
+      <div class="srshead">
+        <h2 class="h2">암기</h2>
+        <div class="srsmeta" id="srsMeta"></div>
+      </div>
+
+      <div class="card" id="srsCard" hidden>
+        <div class="ckind" id="cKind"></div>
+        <div class="cfront" id="cFront"></div>
+        <div class="cback" id="cBack" hidden></div>
+        <div class="cact">
+          <button type="button" class="btn primary wide" id="cFlip">뒤집기</button>
+        </div>
+        <div class="cgrades" id="cGrades" hidden>
+          <button type="button" class="btn g0" data-g="0">몰랐다</button>
+          <button type="button" class="btn g1" data-g="1">애매하다</button>
+          <button type="button" class="btn g2" data-g="2">알았다</button>
+        </div>
+      </div>
+
+      <div class="done" id="srsDone" hidden></div>
+
+      <details class="srsset">
+        <summary><span class="k">설정과 진도</span></summary>
+        <div class="body">
+          <label class="row">
+            <span>하루에 새로 꺼낼 카드</span>
+            <select id="srsLimit">
+              <option value="5">5장</option>
+              <option value="10">10장</option>
+              <option value="20">20장</option>
+              <option value="30">30장</option>
+            </select>
+          </label>
+          <label class="sw"><input type="checkbox" id="kindG"> 뜻 카드 (표제어 → 뜻)</label>
+          <label class="sw"><input type="checkbox" id="kindP"> 파싱 카드 (본문 형태 → 격·수·시제)</label>
+
+          <p class="srsstat" id="srsStat"></p>
+
+          <div class="actions">
+            <button type="button" class="btn" id="srsOut">진도 내보내기</button>
+            <button type="button" class="btn" id="srsIn">진도 되돌리기</button>
+          </div>
+          <textarea id="srsBox" rows="4" spellcheck="false" hidden></textarea>
+          <p class="note">
+            진도는 이 폰 안에만 남습니다. 서버가 없어서 그렇습니다.
+            한 달에 한 번쯤 내보내기를 눌러 나온 글자를 메모장이나 메일에 붙여 두십시오.
+            폰을 바꾸거나 저장소가 비면 그 글자로 되돌릴 수 있습니다.
+          </p>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -339,6 +550,7 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 <!-- ─────────── 탭 ─────────── -->
 <nav class="tabs" role="tablist">
   <button type="button" class="tab on" data-view="read" role="tab" aria-selected="true">읽기</button>
+  <button type="button" class="tab" data-view="srs" role="tab" aria-selected="false">암기<span class="badge" id="srsBadge" hidden></span></button>
   <button type="button" class="tab" data-view="state" role="tab" aria-selected="false">상태</button>
 </nav>
 
@@ -406,9 +618,11 @@ document.querySelectorAll('.tab').forEach(function (t) {
       o.classList.toggle('on', on);
       o.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-    document.getElementById('view-read').hidden = t.dataset.view !== 'read';
-    document.getElementById('view-state').hidden = t.dataset.view !== 'state';
+    ['read', 'srs', 'state'].forEach(function (v) {
+      document.getElementById('view-' + v).hidden = t.dataset.view !== v;
+    });
     if (t.dataset.view === 'state') runChecks();
+    if (t.dataset.view === 'srs') srsEnter();
     window.scrollTo(0, 0);
   });
 });
@@ -595,6 +809,8 @@ function render(M) {
 
   wireWords();
   restore();
+  buildCards(M, LEM, TOK);
+  srsInit();
 }
 
 /* ─────────────────────────── 탭 사전 ─────────────────────────── */
@@ -756,6 +972,463 @@ document.getElementById('nuke').addEventListener('click', function () {
     }));
   }
   Promise.all(jobs).then(function () { location.reload(); });
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   암기 — 간격 반복 (SPEC 4장 P0 #1)
+
+   카드는 모듈에서 자동으로 뽑는다. 손으로 만드는 카드는 없다.
+     뜻 카드   — 표제어를 보고 뜻을 답한다. 빈도가 높은 것부터 나온다.
+     파싱 카드 — 절 안의 한 낱말을 보고 격·수·시제를 답한다.
+                 같은 표기·같은 형태가 여러 번 나오면 첫 자리 하나만 카드가 된다.
+
+   일정은 SM-2의 간략판이다. 자기평가 세 단계로 다음에 볼 날을 정한다.
+   진도는 이 기기의 localStorage에만 남는다 — 그래서 내보내기·되돌리기를 붙였다.
+   ═══════════════════════════════════════════════════════════════════ */
+
+var SRS_KEY = 'srs.v1';
+/* 파싱할 것이 있는 낱말만 카드로 만든다. 격도 법도 없는 접속사·부사는 뺀다. */
+var CASE_SET = ['주격', '소유격', '여격', '대격', '탈격', '호격', '처격'];
+var MOOD_SET = ['직설법', '가정법', '명령법'];
+var NONF_SET = ['현재능동분사', '완료수동분사', '미래능동분사', '완료분사',
+                '부정사', 'gerundive', 'gerund', 'supine'];
+
+var CARDS = [], BY_ID = {}, SENT = {}, SRS = null;
+var QUEUE = [], CUR = null, DUE_N = 0, NEW_N = 0;
+
+function morphFeats(m) {
+  return String(m).replace(/\([^)]*\)/g, ' ').split(/\s+/).filter(Boolean);
+}
+function hasAny(list, feats) {
+  for (var i = 0; i < list.length; i++) if (feats.indexOf(list[i]) >= 0) return true;
+  return false;
+}
+
+/* ── 카드 만들기 ─────────────────────────────────────────────────── */
+function buildCards(M, LEM, TOK) {
+  CARDS = []; BY_ID = {}; SENT = {};
+  M.sentences.forEach(function (s) { SENT[s.id] = s; });
+
+  // 뜻 카드 — 빈도가 높은 것이 먼저. 자주 만나는 낱말이 먼저 몸에 붙어야 한다.
+  // 첫 용례를 함께 붙인다 — SPEC 3.5가 낱말만 있는 카드를 금하기 때문이다.
+  // 앞면은 표제어지만 뒷면에서 반드시 본문 한 줄을 함께 본다.
+  var freq = {}, firstAt = {}, firstTok = {};
+  M.tokens.forEach(function (t, i) {
+    freq[t.lemma_id] = (freq[t.lemma_id] || 0) + 1;
+    if (firstAt[t.lemma_id] == null) { firstAt[t.lemma_id] = i; firstTok[t.lemma_id] = t; }
+  });
+  var gloss = Object.keys(freq).map(function (id) {
+    var l = LEM[id] || {}, ft = firstTok[id] || {};
+    return {
+      id: 'g:' + id, kind: 'g', lemma: l.lemma || id, gloss: l.gloss_ko || '',
+      pos: l.pos || '', n: freq[id], ord: firstAt[id],
+      sid: ft.sentence_id, idx: ft.index, exSurface: ft.surface
+    };
+  }).filter(function (c) { return c.gloss; })
+    .sort(function (a, b) { return b.n - a.n || a.ord - b.ord; });
+
+  // 파싱 카드 — 같은 표기·같은 형태는 한 장만. 본문에 나온 차례대로.
+  var seen = {}, parse = [];
+  M.tokens.forEach(function (t) {
+    var f = morphFeats(t.morph);
+    if (!hasAny(CASE_SET, f) && !hasAny(MOOD_SET, f) && !hasAny(NONF_SET, f)) return;
+    var key = t.surface + '|' + t.morph;
+    if (seen[key]) return;
+    seen[key] = 1;
+    var l = LEM[t.lemma_id] || {};
+    parse.push({
+      id: 'p:' + t.sentence_id + ':' + t.index, kind: 'p',
+      surface: t.surface, morph: t.morph, role: t.syntax_role,
+      lemma: l.lemma || '', gloss: l.gloss_ko || '',
+      sid: t.sentence_id, idx: t.index
+    });
+  });
+
+  CARDS = gloss.concat(parse);
+  CARDS.forEach(function (c) { BY_ID[c.id] = c; });
+  // 새 카드를 꺼낼 차례 — 두 종류를 번갈아 낸다
+  NEW_ORDER = [];
+  var i = 0, j = 0;
+  while (i < gloss.length || j < parse.length) {
+    if (i < gloss.length) NEW_ORDER.push(gloss[i++]);
+    if (j < parse.length) NEW_ORDER.push(parse[j++]);
+  }
+}
+var NEW_ORDER = [];
+
+/* ── 진도 저장 ───────────────────────────────────────────────────── */
+function todayNum() {
+  var d = new Date();
+  return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+}
+
+function srsNormalize(s) {
+  if (!s || typeof s !== 'object') s = {};
+  if (!s.cards || typeof s.cards !== 'object') s.cards = {};
+  if (typeof s.limit !== 'number' || s.limit < 1) s.limit = 10;
+  if (!s.kinds || typeof s.kinds !== 'object') s.kinds = { g: 1, p: 1 };
+  if (!s.log || typeof s.log !== 'object') s.log = {};
+  var t = todayNum();
+  if (s.day !== t) { s.day = t; s.newToday = 0; }
+  if (typeof s.newToday !== 'number') s.newToday = 0;
+  return s;
+}
+function srsSave() { put(SRS_KEY, JSON.stringify(SRS)); }
+
+function srsInit() {
+  var raw = get(SRS_KEY), s = null;
+  if (raw) { try { s = JSON.parse(raw); } catch (e) {} }
+  SRS = srsNormalize(s);
+  document.getElementById('srsLimit').value = String(SRS.limit);
+  document.getElementById('kindG').checked = !!SRS.kinds.g;
+  document.getElementById('kindP').checked = !!SRS.kinds.p;
+  srsCount();
+}
+
+/* ── 오늘 몫 세기 ────────────────────────────────────────────────── */
+function srsCount() {
+  var t = todayNum(), due = 0, unseen = 0;
+  CARDS.forEach(function (c) {
+    if (!SRS.kinds[c.kind]) return;
+    var st = SRS.cards[c.id];
+    if (st) { if (st.d <= t) due++; }
+    else unseen++;
+  });
+  DUE_N = due;
+  NEW_N = Math.min(Math.max(0, SRS.limit - (SRS.newToday || 0)), unseen);
+  var b = document.getElementById('srsBadge'), n = DUE_N + NEW_N;
+  if (n > 0) { b.hidden = false; b.textContent = n > 99 ? '99+' : String(n); }
+  else b.hidden = true;
+  return { due: due, unseen: unseen };
+}
+
+function srsBuildQueue() {
+  var t = todayNum(), due = [];
+  CARDS.forEach(function (c) {
+    if (!SRS.kinds[c.kind]) return;
+    var st = SRS.cards[c.id];
+    if (st && st.d <= t) due.push(c);
+  });
+  var room = Math.max(0, SRS.limit - (SRS.newToday || 0)), fresh = [];
+  for (var i = 0; i < NEW_ORDER.length && fresh.length < room; i++) {
+    var c = NEW_ORDER[i];
+    if (SRS.kinds[c.kind] && !SRS.cards[c.id]) fresh.push(c);
+  }
+  QUEUE = due.concat(fresh);
+}
+
+/* ── 화면 ────────────────────────────────────────────────────────── */
+function verseHtml(sent, target) {
+  var ti = 0, html = '';
+  sent.latin.split(' ').forEach(function (chunk) {
+    var lead = '', trail = '';
+    while (chunk && PUNCT.indexOf(chunk[0]) >= 0) { lead += chunk[0]; chunk = chunk.slice(1); }
+    while (chunk && PUNCT.indexOf(chunk[chunk.length - 1]) >= 0) {
+      trail = chunk[chunk.length - 1] + trail; chunk = chunk.slice(0, -1);
+    }
+    if (lead) html += lead;
+    if (chunk) {
+      html += '<span class="cw' + (ti === target ? ' hit' : '') + '">' + markLong(chunk) + '</span>';
+      ti++;
+    }
+    if (trail) html += trail;
+    html += ' ';
+  });
+  return html;
+}
+
+function paintCard() {
+  var card = document.getElementById('srsCard');
+  var done = document.getElementById('srsDone');
+  var meta = document.getElementById('srsMeta');
+
+  if (!CUR) {
+    card.hidden = true; done.hidden = false;
+    var t = todayNum(), soon = 0, ahead = {};
+    CARDS.forEach(function (c) {
+      var st = SRS.cards[c.id];
+      if (st && SRS.kinds[c.kind]) { if (st.d === t + 1) soon++; ahead[st.d] = 1; }
+    });
+    var learned = 0;
+    CARDS.forEach(function (c) { if (SRS.cards[c.id]) learned++; });
+    done.innerHTML = '';
+    done.appendChild(el('h3', null, '오늘 몫을 끝냈습니다'));
+    done.appendChild(el('p', null, '오늘 ' + (SRS.log[t] || 0) + '장을 넘겼습니다.'));
+    done.appendChild(el('p', null, '내일 볼 카드 ' + soon + '장 · 지금까지 꺼낸 카드 ' +
+      learned + ' / ' + CARDS.length + '장'));
+    meta.innerHTML = '';
+    srsCount();
+    return;
+  }
+
+  done.hidden = true; card.hidden = false;
+  var c = CUR, st = SRS.cards[c.id];
+  var kind = document.getElementById('cKind');
+  kind.innerHTML = '';
+  kind.appendChild(el('span', null, c.kind === 'g' ? '뜻 카드' : '파싱 카드'));
+  if (!st) { kind.appendChild(document.createTextNode(' · ')); kind.appendChild(el('span', 'new', '처음')); }
+  else {
+    kind.appendChild(document.createTextNode(
+      ' · ' + (st.l ? '틀린 적 ' + st.l + '번 · ' : '') + '지난 간격 ' + (st.i || 0) + '일'));
+  }
+
+  var front = document.getElementById('cFront');
+  front.innerHTML = '';
+  front.className = 'cfront ' + c.kind;
+  if (c.kind === 'g') {
+    var big = el('p', 'big'); big.innerHTML = markLong(c.lemma);
+    front.appendChild(big);
+    front.appendChild(el('p', 'ask', '뜻은?'));
+  } else {
+    var s = SENT[c.sid];
+    front.appendChild(el('p', 'cvref', s.id.replace('mk-1-', 'Mc 1,')));
+    var v = el('p', 'cverse'); v.innerHTML = verseHtml(s, c.idx);
+    front.appendChild(v);
+    front.appendChild(el('p', 'ask', '표시된 낱말의 형태는?'));
+    // 자질 목록은 줄을 따로 쓴다. 한 줄에 붙이면 '·수)' 만 다음 줄로 떨어진다.
+    var hint = el('p', 'hint');
+    hint.appendChild(el('span', null, '격·수·성'));
+    hint.appendChild(document.createTextNode(' 또는 '));
+    hint.appendChild(el('span', null, '법·시제·태·인칭·수'));
+    front.appendChild(hint);
+  }
+
+  var back = document.getElementById('cBack');
+  back.innerHTML = ''; back.hidden = true;
+  document.getElementById('cGrades').hidden = true;
+  document.getElementById('cFlip').parentNode.hidden = false;
+
+  meta.innerHTML = '';
+  var left = QUEUE.length + 1;
+  meta.appendChild(el('span', null, '남은 카드 '));
+  meta.appendChild(el('b', null, String(left)));
+  meta.appendChild(el('span', null, ' · 전체 ' + CARDS.length + '장'));
+}
+
+/* 라벨과 값을 격자로 맞춘다. '품사'(두 자)와 '표제어'(세 자)가 어긋나지 않게. */
+function crow(label, value, cls) {
+  var r = el('div', 'crow');
+  r.appendChild(el('span', 'clbl', label));
+  r.appendChild(el('span', 'cval' + (cls ? ' ' + cls : ''), value));
+  return r;
+}
+
+/* '가정법 완료 능동 2인칭 단수 (3변화 동사)' 를 답과 분류로 나눈다.
+   괄호까지 굵게 두면 두 줄로 접히면서 '동사)' 만 떨어진다. */
+function splitMorph(m) {
+  var x = /^(.*?)\s*(\([^)]*\))\s*$/.exec(m);
+  return x ? { head: x[1], tail: x[2] } : { head: m, tail: '' };
+}
+
+function example(sid, idx) {
+  var s = SENT[sid];
+  if (!s) return null;
+  var ex = el('div', 'cex');
+  ex.appendChild(el('p', 'cvref', s.id.replace('mk-1-', 'Mc 1,')));
+  var ev = el('p', 'cverse');
+  ev.innerHTML = verseHtml(s, idx);
+  ex.appendChild(ev);
+  return ex;
+}
+
+function flip() {
+  var c = CUR, back = document.getElementById('cBack');
+  back.innerHTML = '';
+  if (c.kind === 'g') {
+    back.appendChild(el('p', 'ans', c.gloss));
+    back.appendChild(crow('품사', c.pos));
+    back.appendChild(crow('빈도', '1장에 ' + c.n + '번'));
+    // 용례 — 낱말만 외우지 않도록 첫 자리 한 줄을 늘 함께 보인다 (SPEC 3.5)
+    var ex = example(c.sid, c.idx);
+    if (ex) back.appendChild(ex);
+  } else {
+    var m = splitMorph(c.morph), ans = el('p', 'ans');
+    ans.appendChild(document.createTextNode(m.head));
+    if (m.tail) {
+      ans.appendChild(document.createTextNode(' '));
+      ans.appendChild(el('span', 'tail', m.tail));
+    }
+    back.appendChild(ans);
+    back.appendChild(crow('역할', c.role));
+    if (c.lemma) back.appendChild(crow('표제어', c.lemma, 'cser'));
+    if (c.gloss) back.appendChild(crow('뜻', c.gloss));
+  }
+
+  var btns = el('div', 'cbtns');
+  var lemma = c.kind === 'g' ? c.lemma : c.lemma;
+  if (lemma) {
+    var a = el('a', null, '사전 ↗');
+    a.href = 'https://latina.bab2min.pe.kr/xe/lk/' + encodeURIComponent(dictKey(lemma));
+    a.target = '_blank'; a.rel = 'noopener';
+    btns.appendChild(a);
+  }
+  if (c.sid) {
+    var g = el('button', null, '본문에서 보기');
+    g.type = 'button';
+    g.addEventListener('click', function () { gotoVerse(c.sid); });
+    btns.appendChild(g);
+  }
+  // 이미 아는 낱말을 치우는 길. et·in 같은 고빈도 기능어가 앞머리에 몰려 있어 필요하다.
+  var rt = el('button', null, '이 카드는 그만');
+  rt.type = 'button';
+  rt.addEventListener('click', function () {
+    if (!confirm('이 카드를 1년 뒤로 미룹니다. 이미 확실히 아는 낱말일 때 쓰십시오.')) return;
+    var t = todayNum(), st = SRS.cards[c.id];
+    if (!st) {
+      st = { d: t, i: 0, e: 2.3, n: 0, l: 0 };
+      SRS.cards[c.id] = st;
+      SRS.newToday = (SRS.newToday || 0) + 1;
+    }
+    st.i = 365; st.d = t + 365; st.n = (st.n || 0) + 1;
+    SRS.log[t] = (SRS.log[t] || 0) + 1;
+    srsSave();
+    CUR = QUEUE.shift() || null;
+    paintCard();
+    srsStat();
+  });
+  btns.appendChild(rt);
+  back.appendChild(btns);
+
+  back.hidden = false;
+  document.getElementById('cFlip').parentNode.hidden = true;
+  document.getElementById('cGrades').hidden = false;
+}
+
+function gotoVerse(sid) {
+  document.querySelectorAll('.tab').forEach(function (o) {
+    var on = o.dataset.view === 'read';
+    o.classList.toggle('on', on);
+    o.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  ['read', 'srs', 'state'].forEach(function (v) {
+    document.getElementById('view-' + v).hidden = v !== 'read';
+  });
+  var n = document.getElementById(sid);
+  if (n) n.scrollIntoView({ block: 'start' });
+  put('last', sid);
+}
+
+/* ── 자기평가 ────────────────────────────────────────────────────── */
+function grade(g) {
+  if (!CUR) return;
+  var c = CUR, t = todayNum(), st = SRS.cards[c.id];
+  if (!st) {
+    st = { d: t, i: 0, e: 2.3, n: 0, l: 0 };
+    SRS.cards[c.id] = st;
+    SRS.newToday = (SRS.newToday || 0) + 1;
+  }
+  if (g === 0) {
+    // 몰랐다 — 오늘 안에 다시 본다. 간격은 처음으로 돌아간다.
+    st.n = 0; st.l = (st.l || 0) + 1; st.i = 0;
+    st.e = Math.max(1.3, (st.e || 2.3) - 0.2); st.d = t;
+    QUEUE.splice(Math.min(QUEUE.length, 4), 0, c);
+  } else if (g === 1) {
+    // 애매하다 — 간격을 조금만 늘린다
+    st.i = st.n === 0 ? 1 : Math.max(1, Math.round((st.i || 1) * 1.2));
+    st.e = Math.max(1.3, (st.e || 2.3) - 0.05);
+    st.n = (st.n || 0) + 1; st.d = t + st.i;
+  } else {
+    // 알았다 — 1일 → 3일 → 이전 간격 × 난이도 계수
+    st.i = st.n === 0 ? 1 : (st.n === 1 ? 3
+         : Math.min(365, Math.round((st.i || 1) * (st.e || 2.3))));
+    st.e = Math.min(2.8, (st.e || 2.3) + 0.05);
+    st.n = (st.n || 0) + 1; st.d = t + st.i;
+  }
+  SRS.log[t] = (SRS.log[t] || 0) + 1;
+  srsSave();
+  CUR = QUEUE.shift() || null;
+  paintCard();
+  srsStat();
+}
+
+function srsEnter() {
+  if (!SRS) srsInit();
+  SRS = srsNormalize(SRS);          // 날짜가 넘어갔으면 여기서 새 날이 된다
+  srsBuildQueue();
+  CUR = QUEUE.shift() || null;
+  paintCard();
+  srsStat();
+}
+
+/* ── 설정과 진도 ─────────────────────────────────────────────────── */
+function srsStat() {
+  var t = todayNum(), seen = 0, dueTomorrow = 0, mature = 0;
+  CARDS.forEach(function (c) {
+    var st = SRS.cards[c.id];
+    if (!st) return;
+    seen++;
+    if (st.d === t + 1) dueTomorrow++;
+    if ((st.i || 0) >= 21) mature++;
+  });
+  var box = document.getElementById('srsStat');
+  box.innerHTML =
+    '전체 <b>' + CARDS.length + '</b>장 (뜻 ' +
+    CARDS.filter(function (c) { return c.kind === 'g'; }).length + ' · 파싱 ' +
+    CARDS.filter(function (c) { return c.kind === 'p'; }).length + ')<br>' +
+    '꺼낸 카드 <b>' + seen + '</b>장 · 그중 3주 이상 간격 <b>' + mature + '</b>장<br>' +
+    '오늘 넘긴 카드 <b>' + (SRS.log[t] || 0) + '</b>장 · 오늘 새 카드 <b>' +
+    (SRS.newToday || 0) + '/' + SRS.limit + '</b>장 · 내일 볼 카드 <b>' + dueTomorrow + '</b>장';
+  srsCount();
+}
+
+document.getElementById('cFlip').addEventListener('click', flip);
+document.getElementById('cGrades').addEventListener('click', function (e) {
+  var b = e.target.closest('button[data-g]');
+  if (b) grade(+b.dataset.g);
+});
+document.getElementById('srsLimit').addEventListener('change', function () {
+  SRS.limit = +this.value || 10; srsSave(); srsEnter();
+});
+['kindG', 'kindP'].forEach(function (id) {
+  document.getElementById(id).addEventListener('change', function () {
+    SRS.kinds.g = document.getElementById('kindG').checked ? 1 : 0;
+    SRS.kinds.p = document.getElementById('kindP').checked ? 1 : 0;
+    if (!SRS.kinds.g && !SRS.kinds.p) {   // 둘 다 끄면 볼 것이 없다
+      SRS.kinds.g = 1; document.getElementById('kindG').checked = true;
+      alert('한 종류는 켜 두어야 합니다.');
+    }
+    srsSave(); srsEnter();
+  });
+});
+
+document.getElementById('srsOut').addEventListener('click', function () {
+  var box = document.getElementById('srsBox');
+  box.hidden = false;
+  box.value = JSON.stringify(SRS);
+  box.select();
+  try {
+    if (navigator.clipboard) navigator.clipboard.writeText(box.value);
+    else document.execCommand('copy');
+    alert('진도를 복사했습니다. 메모장이나 메일에 붙여 두십시오.');
+  } catch (e) {
+    alert('아래 칸의 글자를 길게 눌러 직접 복사하십시오.');
+  }
+});
+
+document.getElementById('srsIn').addEventListener('click', function () {
+  var box = document.getElementById('srsBox');
+  if (box.hidden || !box.value.trim()) {
+    box.hidden = false; box.value = '';
+    box.placeholder = '내보내 두었던 글자를 여기에 붙여 넣고 이 버튼을 다시 누르십시오.';
+    box.focus();
+    return;
+  }
+  var s = null;
+  try { s = JSON.parse(box.value); } catch (e) {
+    alert('글자가 온전하지 않습니다. 붙여넣기가 잘렸는지 확인하십시오.');
+    return;
+  }
+  if (!s || typeof s !== 'object' || !s.cards) { alert('진도 자료가 아닙니다.'); return; }
+  var n = Object.keys(s.cards).length;
+  if (!confirm('카드 ' + n + '장의 진도로 되돌립니다. 지금 진도는 사라집니다. 계속할까요?')) return;
+  SRS = srsNormalize(s);
+  srsSave();
+  document.getElementById('srsLimit').value = String(SRS.limit);
+  document.getElementById('kindG').checked = !!SRS.kinds.g;
+  document.getElementById('kindP').checked = !!SRS.kinds.p;
+  box.hidden = true; box.value = '';
+  srsEnter();
+  alert('되돌렸습니다.');
 });
 
 /* ─────────────────────────── 부팅 ─────────────────────────── */
