@@ -272,7 +272,7 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 
 .srshead{
   display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;
-  padding:1.5rem 0 .9rem;border-bottom:1px solid var(--rule-strong);
+  padding:1.5rem 0 .5rem;
 }
 .srshead .h2{margin:0}
 .srsmeta{font-size:.79rem;color:var(--muted)}
@@ -283,6 +283,42 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
   background:var(--accent);color:var(--surface);border-radius:2px;
   font-family:var(--mono);font-size:.63rem;line-height:1.15rem;font-weight:600;
   font-variant-numeric:tabular-nums;vertical-align:.08rem;
+}
+
+/* ---------- 오늘 몫 조절 ---------- */
+/* 읽기 화면의 '장음 강조' 줄과 같은 자리에 같은 모양으로 둔다.
+   기본 몫(설정)과 오늘 몫(여기)을 나눠 두어, 늘려 둔 것이 내일까지 따라오지 않는다. */
+.ctllbl{font-size:.8rem;color:var(--muted)}
+.stepper{
+  display:inline-flex;align-items:stretch;
+  border:1px solid var(--rule-strong);border-radius:2px;background:var(--surface);
+  overflow:hidden;
+}
+.stepper b{
+  min-width:2.6rem;padding:.32rem .1rem;text-align:center;
+  font-family:var(--mono);font-size:.86rem;font-weight:600;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+  border-left:1px solid var(--rule);border-right:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;
+}
+.step{
+  font:inherit;font-size:1rem;line-height:1;
+  width:2.1rem;padding:0;margin:0;cursor:pointer;
+  background:none;border:0;color:var(--accent);
+}
+.step:active{background:var(--accent-soft)}
+.step:disabled{color:var(--rule-strong);cursor:default;background:none}
+.step:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+/* 오른쪽 곁말은 고정폭 글꼴의 자간을 물려받으면 한글이 벌어진다 */
+#quotaNote{font-family:var(--sans);font-size:.75rem;letter-spacing:0}
+
+/* ---------- 완료 화면의 '오늘 더 하기' ---------- */
+.moreblk{margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
+.morelbl{margin:0 0 .7rem;font-family:var(--myeongjo);font-size:.95rem;color:var(--ink)}
+.morebtns{display:flex;gap:.45rem;justify-content:center}
+.morebtns .btn{
+  min-width:4.2rem;padding:.5rem .7rem;border-radius:2px;
+  font-size:.84rem;font-weight:600;font-variant-numeric:tabular-nums;
 }
 
 /* ---------- 카드 ---------- */
@@ -384,12 +420,13 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
   margin:1.4rem 0;padding:2.2rem 1.2rem;text-align:center;
   background:var(--surface);border:1px solid var(--rule);border-radius:3px;
 }
-.done h3{margin:0 0 .6rem;font-family:var(--serif);font-size:1.15rem;font-weight:600}
+.done h3{margin:0 0 .6rem;font-family:var(--myeongjo);font-size:1.18rem;font-weight:600}
 .done p{margin:.28rem 0;color:var(--muted);font-size:.84rem}
 
 /* ---------- 설정과 진도 ---------- */
 .srsset{margin:1.5rem 0 2rem;background:none;border:0;border-top:1px solid var(--rule)}
 .srsset summary{padding:.75rem 0;font-size:.82rem;color:var(--muted)}
+.srsset summary .k{font-family:var(--sans);font-size:.82rem;letter-spacing:0;text-transform:none}
 .srsset summary::after{color:var(--faint)}
 .srsset .body{padding:.2rem 0 .5rem}
 .srsset .row{
@@ -453,6 +490,18 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
         <div class="srsmeta" id="srsMeta"></div>
       </div>
 
+      <!-- 오늘 몫 조절. 읽기 화면의 조작 줄과 같은 자리·같은 모양 -->
+      <div class="controls">
+        <span class="ctllbl">오늘 새 카드</span>
+        <span class="stepper">
+          <button type="button" class="step" id="lessNew" aria-label="오늘 새 카드 줄이기">−</button>
+          <b id="newQuota" aria-live="polite">10</b>
+          <button type="button" class="step" id="moreNew" aria-label="오늘 새 카드 늘리기">+</button>
+        </span>
+        <span class="spacer"></span>
+        <span class="resume" id="quotaNote"></span>
+      </div>
+
       <div class="card" id="srsCard" hidden>
         <div class="ckind" id="cKind"></div>
         <div class="cfront" id="cFront"></div>
@@ -473,7 +522,7 @@ summary:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
         <summary><span class="k">설정과 진도</span></summary>
         <div class="body">
           <label class="row">
-            <span>하루에 새로 꺼낼 카드</span>
+            <span>기본 하루 몫 — 날마다 여기서 다시 시작합니다</span>
             <select id="srsLimit">
               <option value="5">5장</option>
               <option value="10">10장</option>
@@ -1069,9 +1118,23 @@ function srsNormalize(s) {
   if (!s.kinds || typeof s.kinds !== 'object') s.kinds = { g: 1, p: 1 };
   if (!s.log || typeof s.log !== 'object') s.log = {};
   var t = todayNum();
-  if (s.day !== t) { s.day = t; s.newToday = 0; }
+  // limit은 날마다 돌아오는 기본 몫, todayLimit은 오늘 하루만의 몫이다.
+  // 날이 바뀌면 오늘 몫은 기본으로 되돌아간다 — 어제 늘린 것이 오늘까지 따라오지 않는다.
+  if (s.day !== t) { s.day = t; s.newToday = 0; s.todayLimit = s.limit; }
   if (typeof s.newToday !== 'number') s.newToday = 0;
+  if (typeof s.todayLimit !== 'number' || s.todayLimit < 0) s.todayLimit = s.limit;
   return s;
+}
+
+/* 오늘 몫으로 아직 꺼낼 수 있는 장수 */
+function roomLeft() {
+  return Math.max(0, (SRS.todayLimit || 0) - (SRS.newToday || 0));
+}
+/* 아직 한 번도 안 꺼낸 카드 (켜 둔 종류만) */
+function unseenCount() {
+  var n = 0;
+  CARDS.forEach(function (c) { if (SRS.kinds[c.kind] && !SRS.cards[c.id]) n++; });
+  return n;
 }
 function srsSave() { put(SRS_KEY, JSON.stringify(SRS)); }
 
@@ -1095,7 +1158,7 @@ function srsCount() {
     else unseen++;
   });
   DUE_N = due;
-  NEW_N = Math.min(Math.max(0, SRS.limit - (SRS.newToday || 0)), unseen);
+  NEW_N = Math.min(roomLeft(), unseen);
   var b = document.getElementById('srsBadge'), n = DUE_N + NEW_N;
   if (n > 0) { b.hidden = false; b.textContent = n > 99 ? '99+' : String(n); }
   else b.hidden = true;
@@ -1109,12 +1172,42 @@ function srsBuildQueue() {
     var st = SRS.cards[c.id];
     if (st && st.d <= t) due.push(c);
   });
-  var room = Math.max(0, SRS.limit - (SRS.newToday || 0)), fresh = [];
+  var room = roomLeft(), fresh = [];
   for (var i = 0; i < NEW_ORDER.length && fresh.length < room; i++) {
     var c = NEW_ORDER[i];
     if (SRS.kinds[c.kind] && !SRS.cards[c.id]) fresh.push(c);
   }
   QUEUE = due.concat(fresh);
+}
+
+/* 오늘 몫이 바뀌었을 때. 보고 있던 카드와 밀린 복습은 건드리지 않고
+   아직 손대지 않은 새 카드만 넣고 뺀다. */
+function refillQueue() {
+  var room = roomLeft();
+  QUEUE = QUEUE.filter(function (c) { return !!SRS.cards[c.id]; });  // 복습만 남긴다
+  if (CUR && !SRS.cards[CUR.id]) {                 // 보고 있는 것이 새 카드라면
+    if (room === 0) CUR = null;                    // 자리가 없어졌으니 물린다
+    else room -= 1;                                // 한 자리는 그것이 차지한다
+  }
+  var added = 0;
+  for (var i = 0; i < NEW_ORDER.length && added < room; i++) {
+    var c = NEW_ORDER[i];
+    if (!SRS.kinds[c.kind] || SRS.cards[c.id]) continue;
+    if (CUR && c.id === CUR.id) continue;
+    QUEUE.push(c); added++;
+  }
+  if (!CUR) { CUR = QUEUE.shift() || null; paintCard(); }
+  else paintMeta();
+}
+
+/* 오늘 몫 늘리기·줄이기. 이미 꺼낸 장수 아래로는 내려가지 않는다 */
+function requota(delta) {
+  var floor = SRS.newToday || 0;
+  var ceil = floor + unseenCount();
+  SRS.todayLimit = Math.max(floor, Math.min(ceil, (SRS.todayLimit || 0) + delta));
+  srsSave();
+  refillQueue();
+  srsStat();
 }
 
 /* ── 화면 ────────────────────────────────────────────────────────── */
@@ -1137,26 +1230,63 @@ function verseHtml(sent, target) {
   return html;
 }
 
+/* 머리줄과 오늘 몫 표시. 카드를 다시 그리지 않고 숫자만 고칠 때도 쓴다 */
+function paintMeta() {
+  var meta = document.getElementById('srsMeta');
+  meta.innerHTML = '';
+  if (CUR) {
+    meta.appendChild(el('span', null, '남은 카드 '));
+    meta.appendChild(el('b', null, String(QUEUE.length + 1)));
+    meta.appendChild(el('span', null, ' · 전체 ' + CARDS.length + '장'));
+  }
+
+  var q = SRS.todayLimit || 0, unseen = unseenCount();
+  document.getElementById('newQuota').textContent = String(q);
+  document.getElementById('lessNew').disabled = q <= (SRS.newToday || 0);
+  document.getElementById('moreNew').disabled = unseen === 0;
+
+  var note = document.getElementById('quotaNote');
+  if (q !== SRS.limit) note.textContent = '기본 ' + SRS.limit + '장';
+  else if (unseen === 0) note.textContent = '남은 새 카드 없음';
+  else note.textContent = '오늘 꺼냄 ' + (SRS.newToday || 0) + '장';
+}
+
 function paintCard() {
   var card = document.getElementById('srsCard');
   var done = document.getElementById('srsDone');
-  var meta = document.getElementById('srsMeta');
 
   if (!CUR) {
     card.hidden = true; done.hidden = false;
-    var t = todayNum(), soon = 0, ahead = {};
+    var t = todayNum(), soon = 0;
     CARDS.forEach(function (c) {
       var st = SRS.cards[c.id];
-      if (st && SRS.kinds[c.kind]) { if (st.d === t + 1) soon++; ahead[st.d] = 1; }
+      if (st && SRS.kinds[c.kind] && st.d === t + 1) soon++;
     });
     var learned = 0;
     CARDS.forEach(function (c) { if (SRS.cards[c.id]) learned++; });
+    var unseen = unseenCount();
     done.innerHTML = '';
-    done.appendChild(el('h3', null, '오늘 몫을 끝냈습니다'));
+    done.appendChild(el('h3', null, unseen === 0 ? '카드를 다 꺼냈습니다' : '오늘 몫을 끝냈습니다'));
     done.appendChild(el('p', null, '오늘 ' + (SRS.log[t] || 0) + '장을 넘겼습니다.'));
     done.appendChild(el('p', null, '내일 볼 카드 ' + soon + '장 · 지금까지 꺼낸 카드 ' +
       learned + ' / ' + CARDS.length + '장'));
-    meta.innerHTML = '';
+
+    // 더 하고 싶은 날은 여기서 바로 늘린다 — 몫이 끝난 이 자리가 그 순간이다
+    if (unseen > 0) {
+      var more = el('div', 'moreblk');
+      more.appendChild(el('p', 'morelbl', '오늘 더 하시겠습니까? 남은 새 카드 ' + unseen + '장'));
+      var row = el('div', 'morebtns');
+      [5, 10, 20].forEach(function (n) {
+        if (n > unseen && n !== 5) return;
+        var b = el('button', 'btn', '+' + Math.min(n, unseen) + '장');
+        b.type = 'button';
+        b.addEventListener('click', function () { requota(Math.min(n, unseen)); });
+        row.appendChild(b);
+      });
+      more.appendChild(row);
+      done.appendChild(more);
+    }
+    paintMeta();
     srsCount();
     return;
   }
@@ -1198,11 +1328,7 @@ function paintCard() {
   document.getElementById('cGrades').hidden = true;
   document.getElementById('cFlip').parentNode.hidden = false;
 
-  meta.innerHTML = '';
-  var left = QUEUE.length + 1;
-  meta.appendChild(el('span', null, '남은 카드 '));
-  meta.appendChild(el('b', null, String(left)));
-  meta.appendChild(el('span', null, ' · 전체 ' + CARDS.length + '장'));
+  paintMeta();
 }
 
 /* 라벨과 값을 격자로 맞춘다. '품사'(두 자)와 '표제어'(세 자)가 어긋나지 않게. */
@@ -1367,8 +1493,9 @@ function srsStat() {
     CARDS.filter(function (c) { return c.kind === 'p'; }).length + ')<br>' +
     '꺼낸 카드 <b>' + seen + '</b>장 · 그중 3주 이상 간격 <b>' + mature + '</b>장<br>' +
     '오늘 넘긴 카드 <b>' + (SRS.log[t] || 0) + '</b>장 · 오늘 새 카드 <b>' +
-    (SRS.newToday || 0) + '/' + SRS.limit + '</b>장 · 내일 볼 카드 <b>' + dueTomorrow + '</b>장';
+    (SRS.newToday || 0) + '/' + SRS.todayLimit + '</b>장 · 내일 볼 카드 <b>' + dueTomorrow + '</b>장';
   srsCount();
+  paintMeta();
 }
 
 document.getElementById('cFlip').addEventListener('click', flip);
@@ -1377,8 +1504,12 @@ document.getElementById('cGrades').addEventListener('click', function (e) {
   if (b) grade(+b.dataset.g);
 });
 document.getElementById('srsLimit').addEventListener('change', function () {
-  SRS.limit = +this.value || 10; srsSave(); srsEnter();
+  SRS.limit = +this.value || 10;
+  SRS.todayLimit = SRS.limit;      // 기본을 바꾸면 오늘 몫도 거기에 맞춘다
+  srsSave(); srsEnter();
 });
+document.getElementById('moreNew').addEventListener('click', function () { requota(5); });
+document.getElementById('lessNew').addEventListener('click', function () { requota(-5); });
 ['kindG', 'kindP'].forEach(function (id) {
   document.getElementById(id).addEventListener('change', function () {
     SRS.kinds.g = document.getElementById('kindG').checked ? 1 : 0;

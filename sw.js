@@ -8,7 +8,7 @@
  */
 'use strict';
 
-var CACHE = 'latin-v10';  // 묻는 줄 명조체
+var CACHE = 'latin-v11';  // 오늘 몫 조절
 var SHELL = ['./', './index.html'];
 
 self.addEventListener('install', function (e) {
